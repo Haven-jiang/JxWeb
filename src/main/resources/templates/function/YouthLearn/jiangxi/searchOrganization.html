@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon6.svg" type="image/x-icon"/>
+
+    <title>Document</title>
+    <style>
+        *,
+        :before,
+        :after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @media screen and (max-width: 1600px) {
+            body{
+                transform: scale(0.75);
+            }
+        }
+
+        @media screen and (max-width: 1000px) {
+            body{
+                transform: scale(0.5);
+            }
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inputArea {
+            justify-content: center;
+            align-items: center;
+            font-family: PingFangSC-Semibold, sans-serif;
+            /* width: 50%; */
+            position: relative;
+            top: -5%;
+            /* font: normal 100% Helvetica, Arial, sans-serif;; */
+        }
+
+        /* 光标 */
+        .code::after {
+            content: "";
+            width: 4px;
+            height: 80%;
+            position: absolute;
+            top: 0;
+            right: -6px;
+            border-radius: 2px;
+            background-color: #000;
+            /* 执行光标动画: 动画名 时长 线性的 无限次播放 */
+            animation: blink 1s linear infinite;
+        }
+
+        .code {
+            /* font-size: 16px; */
+            font-size: 32px;
+            color: #000;
+            margin-top: 25px;
+            padding: 0;
+            /* font-family: monospace; */
+            position: relative;
+        }
+
+        .code span {
+            --delay: 10s;
+
+            display: inline-block;
+            overflow: hidden;
+            width: 0ch;
+            animation: 0.1s text-in ease-in-out forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes text-in {
+            from {
+                width: 0ch;
+            }
+
+            to {
+                width: 1.7ch;
+            }
+        }
+
+        .image_container {
+            margin-left: 5em;
+            position: relative;
+            transition: all 200ms linear;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotate(5deg);
+        }
+
+        .image_container::before {
+            content: "";
+            position: absolute;
+            padding: 1em;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 99%;
+            background-color: #f9f6ee;
+            box-shadow: 0 4px 5px inset #edeade, 0 -4px 5px inset #edeade;
+            transform-origin: left;
+            z-index: -1;
+        }
+
+        .img {
+            width: 400px;
+            height: 700px;
+            transform-origin: left;
+            transform: rotateY(-5deg);
+            transition: all .9s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 50;
+        }
+
+        .image_container:hover {
+            transform: perspective(1500px) rotate(0deg);
+        }
+
+        /* .image_container:hover img {
+            transform: rotateY(-105deg);
+        } */
+
+        .image_container.active {
+            transform: perspective(1500px) rotate(0deg);
+        }
+
+        .image_container.active .img {
+            transform: rotateY(-105deg);
+        }
+
+        .text_container {
+            display: flex;
+            position: absolute;
+            width: 400px;
+            height: 700px;
+            align-content: center;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: column;
+            background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/page.svg);
+        }
+
+        .text_container.above {
+            transform-origin: left;
+            transform: rotateY(-3deg);
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            position: absolute;
+            width: 400px;
+            height: 700px;
+            align-content: center;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: column;
+            background-color: #f9f6ee;
+            box-shadow: 0 4px 5px inset #edeade, 0 -4px 5px inset #edeade;
+        }
+
+        .text_container.above.active {
+            transform: rotateY(-95deg);
+        }
+
+        .text_container.frist {
+            transform-origin: left;
+            transform: rotateY(-2deg);
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            position: absolute;
+            width: 400px;
+            height: 700px;
+            align-content: center;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: column;
+            background-color: #f9f6ee;
+            box-shadow: 0 4px 5px inset #edeade, 0 -4px 5px inset #edeade;
+        }
+
+        .text_container.frist.active {
+            transform: rotateY(-90deg);
+        }
+
+        .text_column {
+            width: 100%;
+            display: inline-flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            margin: 10px;
+        }
+
+        .text_column .title {
+            font-family: cursive;
+            font-size: large;
+            font-weight: 900;
+            margin: 10px;
+        }
+
+        .child_column {
+            width: 100%;
+            display: inline-flex;
+            justify-content: space-around;
+            margin: 10px;
+            max-height: 100px;
+            overflow: scroll;
+        }
+
+        .child_column .title {
+            font-family: cursive;
+            font-size: large;
+            font-weight: 900;
+            margin: 10px;
+        }
+
+        .child_column .result {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: x-large;
+            font-weight: 100;
+            margin: 10px;
+        }
+
+        .title_column {
+            width: 100%;
+            display: inline-flex;
+            justify-content: space-around;
+            margin: 10px;
+        }
+
+        .title_column .title {
+            font-family: cursive;
+            font-size: large;
+            font-weight: 900;
+            margin-right: 78px;
+        }
+
+        .text_column .result {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: x-large;
+            font-weight: 100;
+            margin: 10px;
+        }
+
+        .text_column input {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: x-large;
+            font-weight: 100;
+            margin: 10px;
+            width: 30%;
+            background-color: transparent;
+            border-top-style: none;
+            border-right-style: none;
+            border-bottom-style: solid;
+            border-left-style: none;
+            outline: none;
+        }
+
+        .text_column select {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: x-large;
+            font-weight: 100;
+            margin: 10px;
+            width: 45%;
+            background-color: transparent;
+            border-top-style: none;
+            border-right-style: none;
+            border-bottom-style: groove;
+            border-left-style: none;
+            outline: none;
+        }
+
+        .headline {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: xx-large;
+            font-weight: 100;
+        }
+
+        .bottom_bar {
+            height: 25px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exit {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin: 15px;
+
+            font-size: large;
+            font-weight: 100;
+            transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        .exit:hover {
+            font-weight: 900;
+        }
+
+        .next {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin: 15px;
+            font-size: large;
+            font-weight: 100;
+            transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        .next:hover {
+            font-weight: 900;
+        }
+
+        .search {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: large;
+            font-weight: 100;
+            width: 100%;
+            margin-right: 50px;
+            text-align: right;
+            transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        .search:hover {
+            font-weight: 900;
+        }
+
+        #currentImagePath {
+            width: 100px;
+            height: 162px;
+            margin-left: 100px;
+        }
+
+        .infinity-container {
+            position: absolute;
+            width: 30px;
+            height: 200px;
+            bottom: 10%;
+            left: 67%;
+            transform: rotateZ(180deg);
+            transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            /* z-index: -2; */
+        }
+
+        .infinity-container:hover {
+            height: 225px;
+            width: 30px;
+        }
+
+        .infinity-container:hover .pencil .crayon .crayon-center > span {
+            font-size: large;
+            font-weight: 900;
+        }
+
+        .infinity-container .pencil {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        .infinity-container .pencil .rubber {
+            background-color: #EFA2A2;
+            height: 10%;
+            border-radius: 20% 20% 0 0;
+            margin-top: -5px;
+        }
+
+        .infinity-container .pencil .metal {
+            background-color: #C4D5E0;
+            height: 12%;
+        }
+
+        .infinity-container .pencil .crayon {
+            display: flex;
+            height: 55%;
+        }
+
+        .infinity-container .pencil .crayon .crayon-left {
+            width: 33%;
+            background-color: #FFD87A;
+        }
+
+        .infinity-container .pencil .crayon .crayon-center {
+            width: 33%;
+            background-color: #FDCC66;
+        }
+
+        .infinity-container .pencil .crayon .crayon-center > span {
+            transform: rotateZ(180deg);
+            position: absolute;
+            right: 20%;
+            font-weight: 100;
+            transition: all 1.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        .infinity-container .pencil .crayon .crayon-right {
+            width: 33%;
+            background-color: #F7C456;
+        }
+
+        .infinity-container .pencil .pencil-top {
+            height: 15%;
+            clip-path: polygon(0 0, 30% 100%, 70% 100%, 100% 0);
+            background-color: #FAEEE0;
+        }
+
+        .infinity-container .pencil .pencil-tip {
+            background-color: #2D292A;
+            height: 8%;
+            clip-path: polygon(30% 0, 50% 100%, 70% 0);
+        }
+        #frist-page.active .infinity-container {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="inputArea" id="inputarea">
+        <div class="code active" id="code">永远少年</div>
+    </div>
+    <div class="image_container">
+        <div class="text_container above" id="search-page">
+            <span class="headline">
+                输入你要查找的信息
+            </span>
+            <div class="content">
+                <div class="text_column">
+                    <span class="title">姓名/学号/工号</span>
+                    <input id="in_userid" type="text"></input>
+                </div>
+                <div class="text_column">
+                    <span class="title">团委</span>
+                    <span class="title" onclick="getLast()">上一级</span>
+                    <select type="text" id="organization"></select>
+                </div>
+            </div>
+            <span class="search" onclick="clickSearch()">
+                搜索
+            </span>
+        </div>
+        <div class="text_container frist" id="frist-page">
+            <div class="infinity-container">
+                <div class="pencil" onclick="modifyController()">
+                    <div class="rubber"></div>
+                    <div class="metal"></div>
+                    <div class="crayon">
+                        <div class="crayon-left"></div>
+                        <div class="crayon-center"><span>修改</span></div>
+                        <div class="crayon-right"></div>
+                    </div>
+                    <div class="pencil-top"></div>
+                    <div class="pencil-tip"></div>
+                </div>
+            </div>
+            <span class="headline">
+                你的信息
+            </span>
+            <div class="content" id="frist_info_content">
+                <span id="uuid" style="display: none;"></span>
+                <div class="text_column">
+                    <span class="title">姓名/学号/工号</span>
+                    <span id="userid" class="result">20010315</span>
+                </div>
+                <div class="text_column" id="div_nid">
+                    <span class="title">团委</span>
+                    <span id="nid" class="result">20010315</span>
+                </div>
+                <div class="text_column">
+                    <span class="title">定时时间</span>
+                    <span id="cron" class="result">每周一 14:43</span>
+                </div>
+                <div class="text_column">
+                    <span class="title">邮箱地址</span>
+                    <span id="email" class="result">1476378219@qq.com</span>
+                </div>
+                <div class="text_column">
+                    <span class="title">水印</span>
+                    <span id="watermarkText" class="result">20010315 姜涵文</span>
+                </div>
+                <div class="text_column">
+                    <span class="title">完成状态</span>
+                    <span id="status" class="result">20010315 姜涵文</span>
+                </div>
+            </div>
+            <div class="bottom_bar">
+                <span class="exit" onclick="clickSearchExit()">返回搜索</span>
+                <span class="next" onclick="nextPage()">下一页</span>
+            </div>
+        </div>
+        <div class="text_container" id="second-page">
+            <span class="headline">
+                你的信息
+            </span>
+            <div class="content">
+                <div class="text_column">
+                    <span class="title">上次完成时间</span>
+                    <span id="lastFinishTime" class="result">20010315 姜涵文</span>
+                </div>
+                <div class="text_column">
+                    <span class="title">完成历史</span>
+                    <div class="title_column">
+                        <span class="title">课程</span>
+                        <span class="title">完成时间</span>
+                    </div>
+                    <div class="child_column" id="finishHistory">
+                        <span class="title">null</span>
+                        <span class="result">null</span>
+                    </div>
+                </div>
+                <div class="text_column">
+                    <span class="title">当前图片</span>
+                    <img class="result" id="currentImagePath"></img>
+                </div>
+            </div>
+            <div class="bottom_bar">
+                <span class="next" onclick="nextPage()">上一页</span>
+                <span class="exit"></span>
+            </div>
+        </div>
+        <img class="img" src="https://have1.coding.net/p/image/d/image/git/raw/master/fengmian.svg" onclick="clickContainer()" />
+
+    </div>
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+    <script>
+        let res = [
+            { "aid": "FFFEBFA5-54AD-4666-8750-131835531EDF", "id": "N0017", "level": "2", "memberCnt": "0", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "团省委机关" },
+            { "aid": "6246F567-F09E-4BD9-8C57-B55D1E4EC465", "id": "N0016", "level": "2", "memberCnt": "0", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "省直属单位团委" },
+            { "aid": "null", "id": "N0013", "level": "2", "memberCnt": "0", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "省属本科院校团委" },
+            { "aid": "null", "id": "N0014", "level": "2", "memberCnt": "0", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "非省属本科院校团委" },
+            { "aid": "null", "id": "N0015", "level": "2", "memberCnt": "0", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "高职专科院校团委" },
+            { "aid": "529891B3-D535-40E3-A003-ABF53EC37C9C", "id": "N0002", "level": "2", "memberCnt": "88275", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "南昌市" },
+            { "aid": "5FEB3AFD-271D-4A40-B04C-D5675F3DBB28", "id": "N0003", "level": "2", "memberCnt": "72015", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "九江市" },
+            { "aid": "342D5B10-3F25-4383-8B11-C57670AB5F48", "id": "N0004", "level": "2", "memberCnt": "24755", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "景德镇市" },
+            { "aid": "4A098C27-F1AA-4FA8-8255-E4955E5DE4EC", "id": "N0005", "level": "2", "memberCnt": "29956", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "萍乡市" },
+            { "aid": "93117D5A-A2AC-44B2-B94E-75C9D4B9F88F", "id": "N0006", "level": "2", "memberCnt": "20662", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "新余市" },
+            { "aid": "E00FA490-0420-4256-87A4-E67A4B90F1F3", "id": "N0007", "level": "2", "memberCnt": "22140", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "鹰潭市" },
+            { "aid": "40B6AA0A-1554-453F-BC7D-0F0E51594A31", "id": "N0008", "level": "2", "memberCnt": "138359", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "赣州市" },
+            { "aid": "E28E612B-B332-4A3B-9BC6-FA9DA01CC006", "id": "N0009", "level": "2", "memberCnt": "59952", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "宜春市" },
+            { "aid": "E48960B5-BC26-4F08-9404-B4017B6B38FC", "id": "N0010", "level": "2", "memberCnt": "88611", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "上饶市" },
+            { "aid": "16D4B453-C926-490A-A79D-60710CEA4AEE", "id": "N0011", "level": "2", "memberCnt": "77668", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "吉安市" },
+            { "aid": "D1A82092-49E2-4DF2-B7AA-B5DA9DB87A96", "id": "N0012", "level": "2", "memberCnt": "80205", "pid": "ff8080817f2058ef017f205d4dc00016", "title": "抚州市" }
+        ];
+
+        let organizationData = res;
+        var selectedOrganization = [];
+        let organizationHis = new Map();
+        let curLevel = 0;
+
+        setOption(res)
+
+        function setOption(organizationData, id, select_id) {
+            if(id === undefined) id = 'organization';
+            let v = organizationData[0];
+            let thisformid = v.pid;
+            curLevel = v.level - 1;
+
+            if ($(`#${id}`)[0].childNodes.length !== 0) {
+
+                organizationHis.set(`${$(`#${id}`).attr('level')}`, $(`#${id}`).clone())
+                console.log(organizationHis.get(`${$(`#${id}`).attr('level')}`))
+            }
+            $(`#${id}`).empty();
+            $(`#${id}`).attr('level', `${curLevel}`);
+            $(`#${id}`).attr('value', `${v.pid}`);
+
+            for (var i = 0; i < organizationData.length; i++) {
+                let v = organizationData[i];
+                let select_d = select_id === v.id ? 'selected="selected"' : ''
+                if(select_d !== '') {
+                    selectedOrganization[0] = v.value
+                    selectedOrganization[1] = v.title
+                }
+                $(`#${id}`).append('<option ' + select_d + ' id="id' + v.id + '" value="' + v.id + '">' + v.title + '</option>')
+            }
+
+            $(`#${id}`).change(() => {
+                //alert(document.getElementById("allItem").selected);
+                let selected = $(`#${id} option:selected`);
+                let value = selected.val();
+                let title = selected[0].innerText;
+                console.log(value)
+                // console.log(value);
+                getNext(value, title, id);
+            });
+        }
+
+        function getLast(id) {
+            id = id || 'organization';
+            console.log("last: " + id)
+            if (curLevel <= 1) {
+                alert('不能再退了哦')
+                return;
+            }
+            curLevel -= 1;
+            $(`#${id}`).attr('level', `${curLevel}`);
+            getNext(organizationHis.get(`${curLevel}`).attr('value'), null, id)
+        }
+
+        function getNext(nid, title, id, select_id) {
+            id = id || 'organization'
+            console.log("next: " + id)
+            $.post({
+                url: " /function/youthlearn/jiangxi/getnext",
+                data: {
+                    nid: nid
+                },
+                success: function (data) {
+                    if (data.status === 404) {
+                        selectedOrganization[0] = title
+                        selectedOrganization[1] = nid
+                        // selectedOrganization = nid;
+                        console.log('已选择' + title);
+                        return;
+                    }
+                    // console.log('data.content: ' + data.content);
+                    setOption(data.content, id, select_id);
+                }
+            })
+        }
+    </script>
+
+    <script>
+        let isActive = false;
+
+        let isSearchPage = false;
+
+        let frist_info_content = $('#frist_info_content').clone();
+
+        let codes =
+            [
+                "",
+                "",
+                "",
+                "",
+                ""
+            ];
+
+        $.post({
+            url: "/function/getValue",
+            data: null,
+            success: function (data) {
+                let code1 = data.codes[0].replace(/\S/g, "<span>$&</span>")
+                    .replace(/\s/g, "<span>&nbsp;</span>");
+                let commaList = searchChar(data.codes[0]);
+
+                codes = data.codes;
+                routes = data.routes;
+
+                let code = document.querySelector('.code');
+                code.innerHTML = code1;
+                let delay = 0
+                document.querySelectorAll('span').forEach((span, index) => {
+
+                    delay += 0.1
+                    commaList.forEach((i) => {
+                        if (index === i) delay += 0.3;
+                    })
+                    span.style.setProperty('--delay', `${delay}s`)
+                })
+            }
+        })
+
+        let nid = window.sessionStorage.getItem("nid");
+        let userid = window.sessionStorage.getItem("userid");
+        let organization = window.sessionStorage.getItem("organization");
+
+        let week = ['六', '日', '一', '二', '三', '四', '五', '六'];
+
+        let reflect_char = [
+            '零', '一', '二', '三', '四', '五', '六', '七', '八', '九',
+            '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九',
+            '二十', '二十一', '二十二', '二十三', '二十四', '二十五', '二十六', '二十七', '二十八', '二十九',
+            '三十', '三十一', '三十二', '三十三', '三十四', '三十五', '三十六', '三十七', '三十八', '三十九',
+            '四十', '四十一', '四十二', '四十三', '四十四', '四十五', '四十六', '四十七', '四十八', '四十九',
+            '五十', '五十一', '五十二', '五十三', '五十四', '五十五', '五十六', '五十七', '五十八', '五十九',
+            '六十', '六十一', '六十二', '六十三', '六十四', '六十五', '六十六', '六十七', '六十八', '六十九',
+            '七十', '七十一', '七十二', '七十三', '七十四', '七十五', '七十六', '七十七', '七十八', '七十九',
+            '八十', '八十一', '八十二', '八十三', '八十四', '八十五', '八十六', '八十七', '八十八', '八十九',
+            '九十', '九十一', '九十二', '九十三', '九十四', '九十五', '九十六', '九十七', '九十八', '九十九'
+        ];
+
+        console.log(nid + ':' + userid)
+        if (nid != null && userid != null) search(nid, userid, organization)
+
+
+        // <span class="title" onclick="getLast()">上一级</span>
+        // <select type="text" id="organization"></select>
+
+
+        var value_div_nid;
+        let value_cron;
+        let modifyC = false;
+
+        function modifyController() {
+            if(modifyC) updateINFO();
+            else modifyINFO();
+
+        }
+
+
+        function updateINFO() {
+            let uuid = $('#uuid').attr('uuid');
+            let userid = $('#userid').val()
+            let nid = $('#nid').val()
+            let cron_week = $('#cron_week').val()
+            let cron_time = $('#cron_time').val().split(':')
+            let email = $('#email').val()
+            let watermarkText = $('#watermarkText').val()
+            let cron = (cron_time||cron_week) === undefined ? undefined : (cron_time[2] || 0) + ' ' + (cron_time[1] || 0) + ' ' + (cron_time[0] || 0) + ' ? * ' + cron_week;
+
+            $.post({
+                url: "/function/youthlearn/jiangxi/up",
+                data: {
+                    nid: nid,
+                    userid: userid,
+                    cron: cron,
+                    email: email,
+                    watermarkText: watermarkText,
+                    uuid: uuid
+                },
+                success: function(data) {
+                    window.sessionStorage.setItem("nid", nid);
+                    window.sessionStorage.setItem("userid", userid);
+                    window.sessionStorage.setItem("organization", $(`#id${nid}`)[0].innerText);
+                    // location.reload();
+                    $('#frist_info_content').replaceWith(frist_info_content[0])
+                    search(nid, userid, window.sessionStorage.getItem("organization"))
+                    modifyC = false;
+                }
+            })
+            
+        }
+
+        function modifyINFO() {
+            setFristInfo();
+            let value_nid = $('#nid').clone()//.attr('nid')
+            value_div_nid = $('#nid').clone().attr('nid')
+            // value_cron = $('#cron').clone().attr('value_cron').split(' ');
+            // console.log('value_div_nid: ' + value_div_nid) //.substring(0, value_div_nid.length-4))
+            // let width_userid = $('#userid').width()
+            let value_userid = $('#userid').clone()
+            let width_userid = $('#userid').width()
+            let value_email = $('#email').clone()
+            let width_email = $('#email').width() === 0 ? 200 : $('#email').width()
+            let value_watermarkText = $('#watermarkText').clone()
+            let width_watermarkText = $('#watermarkText').width() === 0 ? 200 : $('#watermarkText').width()
+
+            $('#nid').replaceWith('<select type="text" id="nid"></select>')
+            $('#div_nid').append('<span class="title" id="last_level">上一级</span>')
+            $('#last_level').click(function(){getLast('nid')})
+            console.log(value_email.width())
+
+            getNext(value_div_nid.substring(0, value_div_nid.length-4), null, 'nid', value_div_nid)
+            console.log(`#id${value_div_nid}`)
+
+            $('#userid').replaceWith('<input id="userid" value="' + value_userid[0].innerText + '"></input>')
+            $('#userid').width(width_userid)
+            $('#email').replaceWith('<input id="email" value="' + value_email[0].innerText + '"></input>')
+            $('#email').width(width_email)
+            $('#watermarkText').replaceWith('<input id="watermarkText" value="' + value_watermarkText[0].innerText + '"></input>')
+            $('#watermarkText').width(width_watermarkText)
+            $('#cron')[0].innerText = '每周';
+            $('#cron').append('<select type="time" id="cron_week" name="cron" step="1" style="width: 60px; height: 100%; margin: 0 10px 0 5px;"></select>');
+            $('#cron').append('<input type="time" id="cron_time" name="cron" step="1" style="width: 125px; height: 100%; margin: 0;"></input>');
+            $('#cron_time').val((value_cron[2] < 10 ? '0'+value_cron[2] : value_cron[2]) + ':' + (value_cron[1] < 10 ? '0'+value_cron[1] : value_cron[1]))
+            for(i = 2; i < 7; i++) {
+                let se = i + '';
+                se = value_cron[5] === se ? 'selected="selected"' : '';
+                console.log('value_cron: ' + se);
+                $('#cron_week').append('<option ' + se + ' value="' + i + '">' + reflect_char[i-1] + '</option>')
+            }
+
+            $(`#id${value_div_nid}`).attr("selected", "selected")
+
+            modifyC = true;
+            // $('#frist_info_content').replaceWith(frist_info_content[0])
+            // $('#userid').replaceWith('<input id="userid"></input>')
+        }
+
+        function search_controller() {
+
+            let nid;
+            let userid;
+
+            if($('#search-page.active').length === 0) {
+                nid = $('#organization').val()
+                userid = $('#in_userid').val()
+            }
+            else if($('#search-page.active').length === 0) {
+                nid = $('#nid').val()
+                userid = $('#userid').val()
+            }
+
+            let organization = $(`#id${nid}`)[0].innerText
+
+            search(nid, userid, organization)
+        }
+
+        function search(nid, userid, organization) {
+            // nid = $(`#${organization}`).val()
+            // organization = $(`#id${nid}`)[0].innerText
+            $.post({
+                url: "/function/youthlearn/jiangxi/search",
+                data: {
+                    nid: nid,
+                    userid: userid
+                },
+                success: function (data) {
+                    if (data.status === 522) {
+                        alert('用户名不存在')
+                        return;
+                    }
+                    console.log(data)
+                    let content = data.content
+                    let cron = content.cron.split(' ')
+
+                    let time = '每周' + week[cron[5]] + ' ' + cron[2] + '点' + cron[1] + '分' + cron[0] + '秒'
+                    console.log(content.lastFinishTime)
+                    let finishTime = content.lastFinishTime===null?'null':content.lastFinishTime.replace('T', ' ').substring(0, 19);
+                    let timestamp = content.lastFinishTime===null?'null':new Date(finishTime.substring(0, 19).replace(/-/g, '/')).getTime();
+
+
+                    let finishHistory = []
+                    let sendHistory = []
+                    let currentImagePath = content.currentImagePath
+                    let historyImagePath = content.historyImagePath
+
+                    $('#finishHistory').empty()
+                    content.finishHistory.forEach((tim) => {
+                        tim.finishTime = tim.finishTime.replace('T', ' ').substring(0, 19);
+                        $('#finishHistory').append('<span class="title">' + tim.course + '</span>')
+                        $('#finishHistory').append('<span class="result">' + tim.finishTime + '</span>')
+                        finishHistory.push(tim)
+                    })
+
+                    $('#currentImagePath').attr('src', currentImagePath)
+
+                    content.sendHistory.forEach((tim) => {
+                        tim.finishTime = tim.finishTime.substring(0, 19);
+                        sendHistory.push(tim)
+                    })
+
+                    // console.log(timestamp);
+
+                    // console.log(time)
+                    $('#userid')[0].innerText = content.userid
+                    $('#uuid').attr('uuid', content.uuid);
+                    $('#nid')[0].innerText = organization || selectedOrganization[0]
+                    $('#nid').attr('nid', nid)
+                    $('#watermarkText')[0].innerText = content.watermarkText
+                    $('#cron')[0].innerText = time;
+                    $('#cron').attr('value_cron', content.cron);
+                    value_cron = content.cron.split(' ');
+                    $('#email')[0].innerText = content.email;
+                    $('#status')[0].innerText = content.status === true ? '本周已完成' : '本周未完成'
+                    $('#lastFinishTime')[0].innerText = finishTime;
+                    $('#search-page').addClass('active');
+                    $('.image_container').addClass('active');
+
+                    window.sessionStorage.setItem("nid", nid);
+                    window.sessionStorage.setItem("userid", userid);
+                    window.sessionStorage.setItem("organization", organization || selectedOrganization[0]);
+                    isSearchPage = true;
+                }
+            })
+        }
+
+        function setFristInfo() {
+            frist_info_content = $('#frist_info_content').clone();
+        }
+        //<span class="title">1</span>
+        //<span class="result">20010315 姜涵文</span>
+        // finishHistory
+        // sendHistory
+        // currentImagePath
+        // historyImagePath
+        //
+        // "content": {
+        //     "nid": "N0014000210051021",
+        //     "userid": "20010315",
+        //     "watermarkText": "20010315 姜涵文",
+        //     "status": true,
+        //     "cron": "51 23 5 ? * 4",
+        //     "createTime": "2022-05-10T22:39:19",
+        //     "updateTime": null,
+        //     "lastFinishTime": "2022-05-11T20:46:31",
+        //     "finishHistory": [
+        //     {
+        //         "finishTime": "2022-05-11T20:46:31.308989",
+        //         "course": "12"
+        //     }
+        //     ],
+        //     "sendHistory": [
+        //     {
+        //         "finishTime": "2022-05-11T20:46:34.529453",
+        //         "course": "/Users/jianghanwen/Library/Mobile Documents/com~apple~CloudDocs/JavaIdea2021/mineWebsite/target/image/tg-YouthLearn-jx-N0014000210051021_snapshot/t-20010315/finish_12.jpg"
+        //     }
+        //     ],
+        //     "email": "haven-just@qq.com",
+        //     "currentImagePath": "/static_file/tg-YouthLearn-jx-N0014000210051021_snapshot/t-20010315/finish_12.jpg",
+        //     "historyImagePath": [
+        //          "/static_file/tg-YouthLearn-jx-N0014000210051021_snapshot/t-20010315/finish_12.jpg",
+        //          "/static_file/tg-YouthLearn-jx-N0014000210051021_snapshot/t-20010315/finish_12.jpg",
+        //          "/static_file/tg-YouthLearn-jx-N0014000210051021_snapshot/t-20010315/finish_12.jpg"
+        //     ]
+        // }
+
+        let isFristActive = false;
+
+
+        function nextPage() {
+            if (!isFristActive) {
+                $('#frist-page').addClass('active');
+                if(modifyC) updateINFO()
+                isFristActive = true;
+            }
+            else {
+                $('#frist-page').removeClass('active');
+                isFristActive = false;
+            }
+        }
+
+        function clickContainer() {
+            if (!isActive) {
+                $('.image_container').addClass('active');
+                if (isSearchPage) $('#search-page').addClass('active');
+                if (isFristActive) $('#frist-page').addClass('active');
+                isActive = true;
+            }
+            else {
+                $('#search-page').removeClass('active');
+                $('.image_container').removeClass('active');
+                $('#frist-page').removeClass('active');
+                isActive = false;
+            }
+        }
+
+        function clickSearchExit() {
+            $('#search-page').removeClass('active');
+            if(modifyC) updateINFO()
+            isSearchPage = false;
+        }
+
+        function clickSearch() {
+            let userid = $('#in_userid').val();
+            if (selectedOrganization[1] === undefined || userid === undefined) {
+                alert('学号 团委 不能有空')
+                return;
+            }
+            console.log('selectedOrganization[1]: ' + selectedOrganization[1] + ' in_userid: ' + userid)
+            search_controller()
+        }
+
+        function searchChar(str) {
+            //0, 15, 6, 0, 15, 6, 0
+            let index = 1, resultArray = [];
+            while (index !== 0) {
+                index = str.indexOf('，', index) + 1;
+                if (index === 0) break;
+                resultArray.push(index);
+                console.log(resultArray)
+            }
+            index = 1;
+            while (index !== 0) {
+                index = str.indexOf(' ', index) + 1;
+                if (index === 0) break;
+                resultArray.push(index);
+                console.log(resultArray)
+            }
+            index = 1;
+            while (index !== 0) {
+                index = str.indexOf(',', index) + 1;
+                if (index === 0) break;
+                resultArray.push(index);
+                console.log(resultArray)
+            }
+            index = 1;
+            while (index !== 0) {
+                index = str.indexOf('-', index) + 1;
+                if (index === 0) break;
+                resultArray.push(index);
+                console.log(resultArray)
+            }
+            return resultArray;
+        }
+    </script>
+
+
+</body>
+
+</html>

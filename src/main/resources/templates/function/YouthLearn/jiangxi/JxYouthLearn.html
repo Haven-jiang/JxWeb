@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head meta charset="UTF-8">
+  <link rel="icon" href="/static/favicon6.svg" type="image/x-icon"/>
+
+
+  <style>
+    :root {
+      font-size: 32px;
+      --move: 0;
+    }
+
+    body {
+      display: block;
+      min-height: 100vh;
+      font-family: Helvetica;
+    }
+
+    #container {
+      width: 600px;
+      position: sticky;
+      top: 50%;
+      left: 50%;
+      transition: all .3s cubic-bezier(0.39, 0.575, 0.565, 1);
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    #container.s {
+      animation: transform 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+      animation-delay: 1.2s;
+    }
+
+    @media screen and (max-width: 1000px) {
+
+      #container.s {
+        transform: translateX(-50%) translateY(-45vh);
+      }
+
+      .formcontainer {
+        width: 700px;
+        top: 40%;
+        left: 50%;
+        transform: translateX(-60%);
+      }
+      .form-group input {
+        height: 100px;
+        border-radius: .6rem;
+        font-size: 36px;
+      }
+      .form-group select {
+        height: 100px;
+        border-radius: .6rem;
+        font-size: 36px;
+      }
+      #app {
+        height: 90px;
+        border-radius: 0.6rem;
+        display: flex;
+        height: 2rem;
+        align-items: center;
+      }
+      .span {
+        font-size: 1.5rem;
+        line-height: 3rem;
+        /* transform: translateY(-3rem); */
+      }
+      .button {
+        flex: 0 0 2.2rem;
+        font-size: 50px;
+        height: 90px;
+        /* flex: 0 0 2.2rem;
+        font-size: 1.8rem;
+        height: 3rem; */
+      }
+
+      button {
+        font-size: 30px;
+        height: 100px;
+        width: 350px;
+      }
+
+      .datetime > input {
+        height: 90px;
+        border-radius: 0.6rem;
+      }
+      .form-group label {
+        font-size: 24px;
+      }
+      .label {
+        font-size: 30px;
+      }
+      .message svg {
+        stroke-width: 5;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      #container.s {
+        transform: translateX(-45vw) translateY(-45vh);
+      }
+      .formcontainer {
+        width: 400px;
+        top: 60%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .form-group input {
+        height: 45px;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+      .form-group select {
+        height: 45px;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+      #app {
+        height: 1rem;
+        border-radius: 0.2rem;
+        padding: 0.2rem 0;
+        /* display: block; */
+      }
+      .span {
+        font-size: .6rem;
+        line-height: 1rem;
+        transform: translateY(-1rem);
+      }
+      .button {
+        flex: 0 0 1.2rem;
+        font-size: .6rem;
+        height: 1rem;
+      }
+
+      .datetime > input {
+        height: 45px;
+        border-radius: 0.2rem;
+      }
+      .form-group label {
+        font-size: 12px;
+      }
+      .label {
+        font-size: 15px;
+      }
+      button {
+        font-size: 14px;
+        width: 190px;
+        height: 40px;
+      }
+    }
+
+
+    .blockc {
+      position: relative;
+      height: 100vh;
+      margin: 100vh 0;
+    }
+
+    h1 {
+      margin: 0;
+      letter-spacing: -2px;
+    }
+
+    p {
+      font-size: .9rem;
+      color: #666;
+      line-height: 1.3rem;
+      position: relative;
+      top: .8rem;
+      opacity: 0;
+      animation: .5s swift-up ease-out forwards, .5s fade-in ease-out forwards;
+      animation-delay: .8s;
+    }
+
+    @keyframes fade-in {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .spans {
+      display: inline-block;
+      overflow: hidden;
+      position: relative;
+      top: .8rem;
+      animation: .3s swift-up ease-in-out forwards;
+    }
+
+    i {
+      font-style: normal;
+      position: relative;
+      top: 2rem;
+      animation: .5s swift-up ease-in-out forwards;
+    }
+
+    @keyframes swift-up {
+      to {
+        top: 0rem;
+      }
+    }
+
+    .spans:nth-of-type(1) i {
+      animation-delay: 0s;
+    }
+
+    .spans:nth-of-type(2) i {
+      animation-delay: .1s;
+    }
+
+    .spans:nth-of-type(3) i {
+      animation-delay: .2s;
+    }
+
+    .spans:nth-of-type(4) i {
+      animation-delay: .3s;
+    }
+
+    .spans:nth-of-type(5) i {
+      animation-delay: .4s;
+    }
+
+    .spans:nth-of-type(6) i {
+      animation-delay: .5s;
+    }
+
+    .spans:nth-of-type(1) {
+      animation-delay: 0s;
+    }
+
+    .spans:nth-of-type(2) {
+      animation-delay: .1s;
+    }
+
+    .spans:nth-of-type(3) {
+      animation-delay: .2s;
+    }
+
+    .spans:nth-of-type(4) {
+      animation-delay: .3s;
+    }
+
+    .spans:nth-of-type(5) {
+      animation-delay: .4s;
+    }
+
+    .spans:nth-of-type(6) {
+      animation-delay: .5s;
+    }
+
+    .formcontainer {
+      position: absolute;
+      /* width: 400px; */
+    }
+
+    .youthform {
+      display: none;
+      opacity: 0;
+      top: 0.8rem;
+    }
+
+
+    .youthform.active {
+      /* opacity: 1; */
+      width: 100%;
+      display: inline-flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+      font-size: .9rem;
+      color: #666;
+      line-height: 1.3rem;
+      position: relative;
+      top: .8rem;
+      opacity: 0;
+      animation: .5s swift-up ease-out forwards, .5s fade-in ease-out forwards;
+      animation-delay: .2s;
+    }
+
+    /* .youthform > input {
+      margin: 15px;
+    } */
+
+    .form-group {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: 0 0 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin: 0 0 10px;
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 500;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .form-group input {
+      /* height: 45px; */
+      outline: none;
+      display: block;
+      background: rgba(0, 0, 0, 0.05);
+      width: 100%;
+      border: 0;
+      /* border-radius: 8px; */
+      box-sizing: border-box;
+      padding: 12px 20px;
+      color: #000;
+      font-family: inherit;
+      /* font-size: 12px; */
+      font-weight: 500;
+      line-height: inherit;
+      box-shadow: 0px 3px 12px rgb(0 0 0 / 20%);
+      transition: 0.3s ease;
+    }
+    .form-group select {
+      /* height: 45px; */
+      outline: none;
+      display: block;
+      background: rgba(0, 0, 0, 0.05);
+      width: 100%;
+      border: 0;
+      /* border-radius: 8px; */
+      box-sizing: border-box;
+      padding: 12px 20px;
+      color: #000;
+      font-family: inherit;
+      /* font-size: 12px; */
+      font-weight: 500;
+      line-height: inherit;
+      box-shadow: 0px 3px 12px rgb(0 0 0 / 20%);
+      transition: 0.3s ease;
+    }
+
+    /*button*/
+
+
+    #app {
+      width: 30%;
+      margin-right: 25px;
+      margin-left: 5%;
+      /* height: 1rem; */
+      background-color: rgba(0, 0, 0, .05);
+      /* border-radius: 0.2rem; */
+      display: flex;
+      overflow: hidden;
+      /* padding: 0.2rem 0; */
+      position: relative;
+      box-shadow: 0px 3px 12px rgb(0 0 0 / 20%);
+    }
+
+    #app::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(180deg, rgba(256, 256, 256, 0) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(256, 256, 256, 0) 100%);
+      width: 100%;
+      height: 100%;
+      border-radius: .2rem;
+    }
+
+    .span {
+      color: rgba(0, 0, 0, .5);
+      display: block;
+      flex: 1 1 5rem;
+      /* font-size: .6rem; */
+      /* line-height: 1rem; */
+      text-align: center;
+    }
+
+    .span.before {
+      transform: translateY(0rem);
+      transition: transform .2s ease-in;
+    }
+
+    .span.after {
+      transform: translateY(-2rem);
+      transition: transform .2s ease-in;
+    }
+
+    .span::before {
+      display: block;
+      content: attr(data-before);
+    }
+
+    .span::after {
+      display: block;
+      content: attr(data-after);
+    }
+
+    .button {
+      /* flex: 0 0 1.2rem; */
+      border: 0;
+      background: none;
+      color: rgba(0,0,0,.2);
+      /* font-size: .6rem; */
+      display: flex;
+      line-height: 1rem;
+      padding: 0;
+      margin: 0;
+      width: 1rem;
+      /* height: 1rem; */
+      position: relative;
+      z-index: 100;
+      outline: none;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    /*button*/
+
+    @keyframes loading {
+      0% {
+        cy: 10;
+      }
+      25% {
+        cy: 3;
+      }
+      50% {
+        cy: 10;
+      }
+    }
+    body {
+      -webkit-font-smoothing: antialiased;
+      background-color: #f4f7ff;
+    }
+
+    canvas {
+      height: 80px;
+      pointer-events: none;
+      position: relative;
+      bottom: 80px;
+      width: 300px;
+      z-index: 2;
+    }
+
+    @keyframes swift-down {
+      to {
+        top: 15%;
+      }
+    }
+
+    button.active {
+      /* opacity: 1; */
+      margin-top: 3%;
+      top: .8rem;
+      opacity: 0;
+      animation: .5s swift-down ease-out forwards, .5s fade-in ease-out forwards;
+      animation-delay: .2s;
+    }
+
+    button {
+      opacity: 0;
+      background: none;
+      border: none;
+      color: #f4f7ff;
+      cursor: pointer;
+      font-family: 'Roboto', Arial;
+      font-weight: 500;
+      /* left: 50%; */
+      outline: none;
+      overflow: hidden;
+      padding: 0 10px;
+      position: relative;
+      /* top: 95%; */
+      /* transform: translate(-50%, -50%); */
+      z-index: 1;
+    }
+    button::before {
+      background: #1f2335;
+      border-radius: 50px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) inset;
+      content: '';
+      display: block;
+      height: 100%;
+      margin: 0 auto;
+      position: relative;
+      transition: width 0.2s cubic-bezier(0.39, 1.86, 0.64, 1) 0.3s;
+      width: 100%;
+    }
+
+    button.ready .submitMessage svg {
+      opacity: 1;
+      top: 1px;
+      transition: top .4s ease 600ms, opacity .3s linear 600ms;
+    }
+    button.ready .submitMessage .button-text span {
+      top: 0;
+      opacity: 1;
+      transition: all 0.2s ease calc(var(--dr) + 600ms);
+    }
+
+    button.loading::before {
+      transition: width .3s ease;
+      width: 80%;
+    }
+    button.loading .loadingMessage {
+      opacity: 1;
+    }
+    button.loading .loadingCircle {
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-name: loading;
+      cy: 10;
+    }
+
+    button.complete .submitMessage svg {
+      top: -30px;
+      transition: none;
+    }
+    button.complete .submitMessage .button-text span {
+      top: -8px;
+      transition: none;
+    }
+    button.complete .loadingMessage {
+      top: 80px;
+    }
+    button.complete .successMessage .button-text span {
+      left: 0;
+      opacity: 1;
+      transition: all 0.2s ease calc(var(--d) + 1000ms);
+    }
+    button.complete .successMessage svg {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset .3s ease-in-out 1.4s;
+    }
+
+    .button-text span {
+      opacity: 0;
+      position: relative;
+    }
+
+    .message {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+
+    .message svg {
+      display: inline-block;
+      fill: none;
+      margin-right: 5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .submitMessage .button-text span {
+      top: 8px;
+      transition: all 0.2s ease var(--d);
+    }
+    .submitMessage svg {
+      color: #5c86ff;
+      margin-left: -1px;
+      opacity: 0;
+      position: relative;
+      top: 30px;
+      transition: top .4s ease, opacity .3s linear;
+      width: 14px;
+    }
+
+    .loadingMessage {
+      opacity: 0;
+      transition: opacity 0.3s linear 0.3s, top 0.4s cubic-bezier(0.22, 0, 0.41, -0.57);
+    }
+    .loadingMessage svg {
+      fill: #5c86ff;
+      margin: 0;
+      width: 22px;
+    }
+
+    .successMessage .button-text span {
+      left: 5px;
+      transition: all 0.2s ease var(--dr);
+    }
+    .successMessage svg {
+      color: #5cffa1;
+      stroke-dasharray: 20;
+      stroke-dashoffset: 20;
+      transition: stroke-dashoffset .3s ease-in-out;
+      width: 14px;
+    }
+
+    .loadingCircle:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .loadingCircle:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+    .datetime {
+      display: inline-flex;
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .datetime > input {
+      /* height: 45px; */
+      margin-left: 5%;
+      outline: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      background-color: rgba(0, 0, 0, .05);
+      width: 35%;
+      border: 0;
+      /* border-radius: 0.2rem; */
+      box-sizing: border-box;
+      padding: 12px 20px;
+      color: rgba(0, 0, 0, .5);
+      font-family: inherit;
+      /* font-size: 15px; */
+      font-weight: 500;
+      line-height: inherit;
+      box-shadow: 0px 3px 12px rgb(0 0 0 / 20%);
+      transition: 0.3s ease;
+    }
+
+    .datetime > input:-ms-input-placeholder {
+      color: rgba(0, 0, 0, .5);
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+
+<!-- 引入字体图标 -->
+
+<body>
+<div id="container">
+  <h1>
+    <span class="spans"><i>青年</i></span>
+    <span class="spans"><i>大学习</i></span>
+    <span class="spans"><i>定时任务</i></span>
+    <span class="spans"><i>注册</i></span>
+    <span class="spans"><i>添加</i></span>
+    <span class="spans"><i>页面</i></span>
+  </h1>
+  <p>
+    Create, prototype, collaborate, and bring your ideas to life with the design platform used by over one million people — from freelancers, to the world’s largest teams.
+  </p>
+</div>
+
+<div class="formcontainer">
+  <form class="youthform" method="post" action="">
+    <div class="youthform active" id="organizations">
+      <label for="organizations">团委(必填)</label>
+    </div>
+    <div class="form-group">
+      <label for="userid">姓名/学号/工号(必填)</label>
+      <input type="text" id="userid" name="userid" required="required"/>
+    </div>
+    <div class="form-group">
+      <label for="cron">定时时间(选填 不填随机)</label>
+      <div class="datetime">
+        <span class="label">星期</span>
+        <div id="app">
+          <div class="button" @click="subtract" :disabled="isAnimating">
+            <i class="fas fa-minus"></i>
+          </div>
+          <span class="span cronweek" :data-value="count" :class="{before: isBefore, after: isAfter}" :data-before="countBefore" :data-after="countAfter">{{ cCount }}</span>
+          <div class="button" @click="add" :disabled="isAnimating">
+            <i class="fas fa-plus"></i>
+          </div>
+        </div>
+        <span class="label">时间</span>
+        <input type="time" id="cron" name="cron" step="1"/>
+      </div>
+    </div>
+    <!-- <input type="text" name="userid" id="userid"> -->
+    <div class="form-group">
+      <label for="email">邮箱地址(选填)</label>
+      <input type="email" id="email" name="email"/>
+    </div>
+    <div class="form-group">
+      <label for="realName">截图水印文字(选填)</label>
+      <input type="text" id="realName" name="realName"/>
+    </div>
+    <input type="text" id="hidden" name="hidden" required="required" hidden/>
+
+
+    <button id="button" class="ready" onclick="clickButton();">
+
+      <div class="message submitMessage">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 12.2">
+          <polyline stroke="currentColor" points="2,7.1 6.5,11.1 11,7.1 "/>
+          <line stroke="currentColor" x1="6.5" y1="1.2" x2="6.5" y2="10.3"/>
+        </svg> <span class="button-text">点击添加!</span>
+      </div>
+
+      <div class="message loadingMessage">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 17">
+          <circle class="loadingCircle" cx="2.2" cy="10" r="1.6"/>
+          <circle class="loadingCircle" cx="9.5" cy="10" r="1.6"/>
+          <circle class="loadingCircle" cx="16.8" cy="10" r="1.6"/>
+        </svg>
+      </div>
+
+      <div class="message successMessage">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 11">
+          <polyline stroke="currentColor" points="1.4,5.8 5.1,9.5 11.6,2.1 "/>
+        </svg> <span id="respondtext" class="button-text">成功</spanid>
+      </div>
+    </button>
+
+    <canvas id="canvas"></canvas>
+
+  </form>
+</div>
+</div>
+
+
+
+
+</body>
+
+
+<script src="https://kit.fontawesome.com/5dd3d0b0bf.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/gsap.min.js"></script>
+<!--<script src="./Physics2DPlugin.min.js"></script>-->
+
+<script>
+  let res = [
+    {"aid":"FFFEBFA5-54AD-4666-8750-131835531EDF","id":"N0017","level":"2","memberCnt":"0","pid":"ff8080817f2058ef017f205d4dc00016","title":"团省委机关"},
+    {"aid":"6246F567-F09E-4BD9-8C57-B55D1E4EC465","id":"N0016","level":"2","memberCnt":"0","pid":"ff8080817f2058ef017f205d4dc00016","title":"省直属单位团委"},
+    {"aid":"null","id":"N0013","level":"2","memberCnt":"0","pid":"ff8080817f2058ef017f205d4dc00016","title":"省属本科院校团委"},
+    {"aid":"null","id":"N0014","level":"2","memberCnt":"0","pid":"ff8080817f2058ef017f205d4dc00016","title":"非省属本科院校团委"},
+    {"aid":"null","id":"N0015","level":"2","memberCnt":"0","pid":"ff8080817f2058ef017f205d4dc00016","title":"高职专科院校团委"},
+    {"aid":"529891B3-D535-40E3-A003-ABF53EC37C9C","id":"N0002","level":"2","memberCnt":"88275","pid":"ff8080817f2058ef017f205d4dc00016","title":"南昌市"},
+    {"aid":"5FEB3AFD-271D-4A40-B04C-D5675F3DBB28","id":"N0003","level":"2","memberCnt":"72015","pid":"ff8080817f2058ef017f205d4dc00016","title":"九江市"},
+    {"aid":"342D5B10-3F25-4383-8B11-C57670AB5F48","id":"N0004","level":"2","memberCnt":"24755","pid":"ff8080817f2058ef017f205d4dc00016","title":"景德镇市"},
+    {"aid":"4A098C27-F1AA-4FA8-8255-E4955E5DE4EC","id":"N0005","level":"2","memberCnt":"29956","pid":"ff8080817f2058ef017f205d4dc00016","title":"萍乡市"},
+    {"aid":"93117D5A-A2AC-44B2-B94E-75C9D4B9F88F","id":"N0006","level":"2","memberCnt":"20662","pid":"ff8080817f2058ef017f205d4dc00016","title":"新余市"},
+    {"aid":"E00FA490-0420-4256-87A4-E67A4B90F1F3","id":"N0007","level":"2","memberCnt":"22140","pid":"ff8080817f2058ef017f205d4dc00016","title":"鹰潭市"},
+    {"aid":"40B6AA0A-1554-453F-BC7D-0F0E51594A31","id":"N0008","level":"2","memberCnt":"138359","pid":"ff8080817f2058ef017f205d4dc00016","title":"赣州市"},
+    {"aid":"E28E612B-B332-4A3B-9BC6-FA9DA01CC006","id":"N0009","level":"2","memberCnt":"59952","pid":"ff8080817f2058ef017f205d4dc00016","title":"宜春市"},
+    {"aid":"E48960B5-BC26-4F08-9404-B4017B6B38FC","id":"N0010","level":"2","memberCnt":"88611","pid":"ff8080817f2058ef017f205d4dc00016","title":"上饶市"},
+    {"aid":"16D4B453-C926-490A-A79D-60710CEA4AEE","id":"N0011","level":"2","memberCnt":"77668","pid":"ff8080817f2058ef017f205d4dc00016","title":"吉安市"},
+    {"aid":"D1A82092-49E2-4DF2-B7AA-B5DA9DB87A96","id":"N0012","level":"2","memberCnt":"80205","pid":"ff8080817f2058ef017f205d4dc00016","title":"抚州市"}
+  ];
+
+  let organizationData = res;
+
+  var selectedOrganization = [];
+
+  // $('#organization').select(() => {
+  //     console.log(this)
+  // })
+
+  setOption(res);
+
+
+  // document.querySelectorAll('.o-child').forEach((item, index) => {
+  //     item.addEventListener('click', (event) => {
+  //         console.log(event.target.attr('value'))
+  //         // getNext()
+  //     })
+  // })
+
+  function setOption(organizationData) {
+    // $('#organizations').empty();
+    let v = organizationData[0];
+    let thisformid = v.pid;
+    let curLevel = v.level-1;
+
+    for(let l = 9; l >= curLevel; l--) $(`.level${l}`).remove();
+
+
+    $('#organizations').append('<div class="form-group level'+ curLevel +'" id="'+v.aid+'">')
+    // console.log('<div class="form-group level'+v.level-1+'" id="'+v.aid+'"')
+    $(`#${v.aid}`).append('<label for="'+(v.level - 1)+'nid">'+(v.level - 1)+'级团委</label>' +
+            '<select type="text" id="'+v.pid+'" name="'+v.pid+'" required="required">');
+
+    for(var i = 0; i <organizationData.length; i++){
+      let v = organizationData[i];
+
+      $(`#${thisformid}`).append('<option class="ochild" value="' + v.id + '">' + v.title + '</option>')
+      // if(i === organizationData.length-1) $('#organizations').append('</select>');
+      // $('.ochild').click((event)=>{
+      //   let value = $(event.target).attr('value');
+      //   console.log(value)
+      //   getNext(value)
+      // })
+
+    }
+
+    $(`#${thisformid}`).change(() => {
+      //alert(document.getElementById("allItem").selected);
+      let selected = $(`#${thisformid} option:selected`);
+      let value = selected.val();
+      let title = selected[0].innerText;
+      // console.log(selected.innerHTML)
+      // console.log(value);
+      getNext(value, title);
+    });
+
+  }
+
+  function getNext(nid, title) {
+    $.post({
+      url: "/function/youthlearn/jiangxi/getnext",
+      data: {
+        nid: nid
+      },
+      success: function (data) {
+        if (data.status === 404) {
+          selectedOrganization[0] = title
+          selectedOrganization[1] = nid
+          // selectedOrganization = nid;
+          console.log('已选择' + title);
+          return;
+        }
+        // console.log('data.content: ' + data.content);
+        setOption(data.content);
+      }
+    })
+  }
+</script>
+
+<script>
+  // $('body,html').animate({
+  //   scrollTop: scrollTop
+  // }, 300);
+
+  window.addEventListener('scroll', (e) => {
+    let noStickyOffset = document.documentElement.scrollHeight - document.documentElement.clientHeight
+    let scrolled = document.documentElement.scrollTop / noStickyOffset
+
+    if(scrolled !== 0) {
+      document.getElementById('container').classList.add('s');
+      document.querySelector('.youthform').classList.add('active');
+      document.querySelector('button').classList.add('active');
+    }
+    else {
+      document.getElementById('container').classList.remove('s');
+      document.querySelector('.youthform').classList.remove('active');
+      document.querySelector('button').classList.remove('active');
+    }
+    console.log(scrolled)
+  })
+</script>
+
+<script>
+  const button = document.getElementById('button');
+  var disabled = false;
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let cx = ctx.canvas.width / 2;
+  let cy = ctx.canvas.height / 2;
+
+  // add Confetti/Sequince objects to arrays to draw them
+  let confetti = [];
+  let sequins = [];
+
+  // ammount to add on each button press
+  const confettiCount = 20;
+  const sequinCount = 10;
+
+  // "physics" variables
+  const gravityConfetti = 0.3;
+  const gravitySequins = 0.55;
+  const dragConfetti = 0.075;
+  const dragSequins = 0.02;
+  const terminalVelocity = 3;
+
+  // colors, back side is darker for confetti flipping
+  const colors = [
+    { front : '#7b5cff', back: '#6245e0' }, // Purple
+    { front : '#b3c7ff', back: '#8fa5e5' }, // Light Blue
+    { front : '#5c86ff', back: '#345dd1' }  // Darker Blue
+  ];
+
+  // helper function to pick a random number within a range
+  randomRange = (min, max) => Math.random() * (max - min) + min;
+
+  // helper function to get initial velocities for confetti
+  // this weighted spread helps the confetti look more realistic
+  initConfettoVelocity = (xRange, yRange) => {
+    const x = randomRange(xRange[0], xRange[1]);
+    const range = yRange[1] - yRange[0] + 1;
+    let y = yRange[1] - Math.abs(randomRange(0, range) + randomRange(0, range) - range);
+    if (y >= yRange[1] - 1) {
+      // Occasional confetto goes higher than the max
+      y += (Math.random() < .25) ? randomRange(1, 3) : 0;
+    }
+    return {x: x, y: -y};
+  }
+
+  // Confetto Class
+  function Confetto() {
+    this.randomModifier = randomRange(0, 99);
+    this.color = colors[Math.floor(randomRange(0, colors.length))];
+    this.dimensions = {
+      x: randomRange(5, 9),
+      y: randomRange(8, 15),
+    };
+    this.position = {
+      x: randomRange(canvas.width/2 - button.offsetWidth/4, canvas.width/2 + button.offsetWidth/4),
+      y: randomRange(canvas.height/2 + button.offsetHeight/2 + 8, canvas.height/2 + (1.5 * button.offsetHeight) - 8),
+    };
+    this.rotation = randomRange(0, 2 * Math.PI);
+    this.scale = {
+      x: 1,
+      y: 1,
+    };
+    this.velocity = initConfettoVelocity([-9, 9], [6, 11]);
+  }
+  Confetto.prototype.update = function() {
+    // apply forces to velocity
+    this.velocity.x -= this.velocity.x * dragConfetti;
+    this.velocity.y = Math.min(this.velocity.y + gravityConfetti, terminalVelocity);
+    this.velocity.x += Math.random() > 0.5 ? Math.random() : -Math.random();
+
+    // set position
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+
+    // spin confetto by scaling y and set the color, .09 just slows cosine frequency
+    this.scale.y = Math.cos((this.position.y + this.randomModifier) * 0.09);
+  }
+
+  // Sequin Class
+  function Sequin() {
+    this.color = colors[Math.floor(randomRange(0, colors.length))].back,
+            this.radius = randomRange(1, 2),
+            this.position = {
+              x: randomRange(canvas.width/2 - button.offsetWidth/3, canvas.width/2 + button.offsetWidth/3),
+              y: randomRange(canvas.height/2 + button.offsetHeight/2 + 8, canvas.height/2 + (1.5 * button.offsetHeight) - 8),
+            },
+            this.velocity = {
+              x: randomRange(-6, 6),
+              y: randomRange(-8, -12)
+            }
+  }
+  Sequin.prototype.update = function() {
+    // apply forces to velocity
+    this.velocity.x -= this.velocity.x * dragSequins;
+    this.velocity.y = this.velocity.y + gravitySequins;
+
+    // set position
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+  }
+
+  // add elements to arrays to be drawn
+  initBurst = () => {
+    for (let i = 0; i < confettiCount; i++) {
+      confetti.push(new Confetto());
+    }
+    for (let i = 0; i < sequinCount; i++) {
+      sequins.push(new Sequin());
+    }
+  }
+
+  // draws the elements on the canvas
+  render = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confetti.forEach((confetto, index) => {
+      let width = (confetto.dimensions.x * confetto.scale.x);
+      let height = (confetto.dimensions.y * confetto.scale.y);
+
+      // move canvas to position and rotate
+      ctx.translate(confetto.position.x, confetto.position.y);
+      ctx.rotate(confetto.rotation);
+
+      // update confetto "physics" values
+      confetto.update();
+
+      // get front or back fill color
+      ctx.fillStyle = confetto.scale.y > 0 ? confetto.color.front : confetto.color.back;
+
+      // draw confetto
+      ctx.fillRect(-width / 2, -height / 2, width, height);
+
+      // reset transform matrix
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+      // clear rectangle where button cuts off
+      if (confetto.velocity.y < 0) {
+        ctx.clearRect(canvas.width/2 - button.offsetWidth/2, canvas.height/2 + button.offsetHeight/2, button.offsetWidth, button.offsetHeight);
+      }
+    })
+
+    sequins.forEach((sequin, index) => {
+      // move canvas to position
+      ctx.translate(sequin.position.x, sequin.position.y);
+
+      // update sequin "physics" values
+      sequin.update();
+
+      // set the color
+      ctx.fillStyle = sequin.color;
+
+      // draw sequin
+      ctx.beginPath();
+      ctx.arc(0, 0, sequin.radius, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // reset transform matrix
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+      // clear rectangle where button cuts off
+      if (sequin.velocity.y < 0) {
+        ctx.clearRect(canvas.width/2 - button.offsetWidth/2, canvas.height/2 + button.offsetHeight/2, button.offsetWidth, button.offsetHeight);
+      }
+    })
+
+    // remove confetti and sequins that fall off the screen
+    // must be done in seperate loops to avoid noticeable flickering
+    confetti.forEach((confetto, index) => {
+      if (confetto.position.y >= canvas.height) confetti.splice(index, 1);
+    });
+    sequins.forEach((sequin, index) => {
+      if (sequin.position.y >= canvas.height) sequins.splice(index, 1);
+    });
+
+    window.requestAnimationFrame(render);
+  }
+
+  // cycle through button states when clicked
+  clickButton = () => {
+    if (!disabled) {
+      disabled = true;
+      // Loading stage
+      button.classList.add('loading');
+      button.classList.remove('ready');
+      setTimeout(() => {
+
+        // let nullArray = []
+        let userid = $('#userid').val()
+        let cron_time = $('#cron').val().split(':')
+        let cron_week = $('.cronweek').attr('data-value')
+        let cron = $('#cron').val() === '' ? undefined : ((cron_time[2] === '' ? 0 : cron_time[2]) + ' ' + (cron_time[1] === '' ? 0 : cron_time[1]) + ' ' + (cron_time[0] === '' ? 0 : cron_time[0]) + ' ? * ' + cron_week);
+        let email = $('#email').val() === '' ? undefined : $('#email').val()
+        let realName = $('#realName').val() === '' ? undefined : $('#realName').val()
+        let nid = selectedOrganization[1];
+
+        console.log('userid: ' + userid)
+        console.log('nid: ' + nid)
+        console.log('cron: ' + cron)
+        console.log('email: ' + email)
+        console.log('realName: ' + realName)
+        if (userid === null || nid === null) {
+          alert('姓名/学号/工号 和 团委 是必填项!');
+          button.classList.add('ready');
+          button.classList.remove('loading');
+          return;
+        }
+        postData(nid, userid, cron, email, realName);
+        // Completed stage
+        button.classList.add('complete');
+        button.classList.remove('loading');
+        setTimeout(() => {
+          window.initBurst();
+          setTimeout(() => {
+            // Reset button so user can select it again
+            disabled = false;
+            button.classList.add('ready');
+            button.classList.remove('complete');
+          }, 4000);
+        }, 320);
+      }, 1800);
+    }
+  }
+
+  function postData(nid, userid, cron, email, realName) {
+    $.post({
+      url: "/function/youthlearn/jiangxi/register",
+      data: {
+        nid: nid,
+        userid: userid,
+        cron: cron,
+        email: email,
+        watermarkText: realName
+      },
+      success: function (data) {
+        let $responds = $('#respondtext')[0].childNodes;
+        let desc = data.desc;
+        if (data.status === 400) {
+          window.sessionStorage.setItem("nid", nid);
+          window.sessionStorage.setItem("userid", userid);
+          window.sessionStorage.setItem("organization", selectedOrganization[0]);
+          window.location = '/function/youthlearn/jiangxi/query_page'
+        }
+        console.log(desc)
+        $responds.forEach((respond, index) => {
+          if (index < desc.length) respond.innerText = desc[index]
+        })
+        console.log(data.content);
+        if (data.status === 521) {
+          alert(selectedOrganization[0] + '下已经存在' + userid)
+          return;
+        }
+      }
+    })
+  }
+
+  // re-init canvas if the window size changes
+  resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cx = ctx.canvas.width / 2;
+    cy = ctx.canvas.height / 2;
+  }
+
+  // resize listenter
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+  });
+
+  // click button on spacebar or return keypress
+  document.body.onkeyup = (e) => {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      clickButton();
+    }
+  }
+
+  // Set up button text transition timings on page load
+  textElements = button.querySelectorAll('.button-text');
+  textElements.forEach((element) => {
+    characters = element.innerText.split('');
+    let characterHTML = '';
+    characters.forEach((letter, index) => {
+      characterHTML += `<span class="char${index}" style="--d:${index * 30}ms; --dr:${(characters.length - index - 1) * 30}ms;">${letter}</span>`;
+    })
+    element.innerHTML = characterHTML;
+  })
+
+  // kick off the render loop
+  render();
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+
+<script>
+  let week = ['六', '日', '一', '二', '三', '四', '五', '六'];
+  new Vue({
+    el: '#app',
+    data: {
+      count: 2,
+      countBefore: 6,
+      countAfter: 3,
+      cCount: week[2],
+      cCountBefore: week[6],
+      cCountAfter: week[3],
+      isBefore: false,
+      isAfter: false,
+    },
+    computed: {
+      isAnimating() {
+        return this.isBefore || this.isAfter
+      }
+    },
+    methods: {
+      subtract() {
+        this.isBefore = true
+
+        setTimeout(() => {
+          this.count--
+          if(this.count <= 1) this.count = 6;
+          this.countBefore = this.count - 1
+          this.countAfter = this.count + 1
+          if(this.count === 2) {
+            this.countBefore  = 6
+          }
+          if(this.count === 6) {
+            this.countAfter  = 2
+          }
+          this.cCount = week[this.count];
+          this.cCountBefore = week[this.countBefore];
+          this.cCountAfter = week[this.countAfter];
+          this.isBefore = false
+        }, 200)
+      },
+      add() {
+        this.isAfter = true
+
+        setTimeout(() => {
+          this.count++
+          if(this.count > 6) this.count = 2;
+          this.countBefore = this.count - 1
+          this.countAfter = this.count + 1
+
+          if(this.count === 2) {
+            this.countBefore  = 6
+          }
+          if(this.count === 6) {
+            this.countAfter  = 2
+          }
+          this.cCount = week[this.count];
+          this.cCountBefore = week[this.countBefore];
+          this.cCountAfter = week[this.countAfter];
+          this.isAfter = false
+        }, 200)
+      }
+    }
+  })
+</script>
+
+</html>

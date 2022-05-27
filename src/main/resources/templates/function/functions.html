@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+ lang="en">
+<head>
+  <meta http-equiv="content-type"
+        content="text/html; charset=utf-8">
+  <meta name="viewport"
+        content="width=device-width,
+  initial-scale=1, maximum-scale=1,
+  user-scalable=no">
+
+  <title>姜小屋 - 功能专区</title>
+  <!-- 引入字体图标 -->
+  <link rel="icon" href="/static/favicon6.svg" type="image/x-icon"/>
+  <script src="https://kit.fontawesome.com/5dd3d0b0bf.js" crossorigin="anonymous"></script>
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      /* 100%窗口高度 */
+      height: 100vh;
+      /* width: 50%; */
+      /* 弹性布局 水平+垂直布局 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 径向渐变背景 */
+      background: #46b886;
+      -webkit-tap-highlight-color: transparent;
+      transition: 1.7s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+      flex-direction: column;
+    }
+
+    .inputArea{
+      justify-content: center;
+      align-items: center;
+      font-family: PingFangSC-Semibold, sans-serif;
+      /* width: 50%; */
+      position: relative;
+      top: -5%;
+      /* font: normal 100% Helvetica, Arial, sans-serif;; */
+    }
+
+    /* 光标 */
+    .code::after{
+      content: "";
+      width: 4px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: -3px;
+      border-radius: 2px;
+      background-color: rgb(247, 243, 243);
+      /* 执行光标动画: 动画名 时长 线性的 无限次播放 */
+      animation: blink 1s linear infinite;
+    }
+
+    .card.active{
+      flex: 1;
+      margin: 0;
+    }
+
+    .card::before{
+      content: "";
+      height: 90%;
+      background-color: rgba(0,0,0,0.5);
+      /* 绝对定位 */
+      position: absolute;
+      top: 5%;
+      /* 投影 */
+      box-shadow: 0 6px 12px 12px rgba(0,0,0,0.4);
+      opacity: 1;
+      /* 设置旋转元素的基点位置 */
+      transform-origin: top center;
+      /* 设置过渡:时长 加速后减速 */
+      transition: 0.3s ease-in-out;
+    }
+
+    .card-cover{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      /* 溢出隐藏 */
+      overflow: hidden;
+      /* 开启3D */
+      transform-style: preserve-3d;
+      /* 设置旋转元素的基点位置 */
+      transform-origin: top center;
+      /* 设置过渡 */
+    }
+
+
+    .card .content{
+      display: flex;
+      position: absolute;
+      left: 14px;
+      right: 0;
+      bottom: 167px;
+      height: 42px;
+      transition: 0.8s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+
+      /* display: flex;
+      position: absolute;
+      left: 10px;
+      right: 0;
+      bottom: 10px;
+      height: 40px;
+      transition: 1.5s cubic-bezier(0.05, 0.61, 0.41, 0.95); */
+    }
+
+    .card .content .icon{
+
+      min-width: 50px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--bgColorItem);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 23px;
+
+      /* min-width: 50px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--bgColorItem);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 23px; */
+    }
+
+    .card:nth-child(1) .fa{
+      color: #fff;
+    }
+    .card:nth-child(2) .fa{
+      color: #fff;
+    }
+    .card:nth-child(3) .fa{
+      color: #fff;
+    }
+    .card:nth-child(4) .fa{
+      color: #fff;
+    }
+    .card:nth-child(5) .fa{
+      color: #fff;
+    }
+
+    .card .content .text{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 10px;
+      color: #fff;
+      width: 100%;
+    }
+
+    .card .content .text div{
+      /* 超出显示省略号 (需要设置width) */
+      width: 1080px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .card .content .text .tit{
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .card .content .text .sub{
+      /* 设置过渡效果延迟 */
+      transition-delay: 0.1s;
+    }
+
+
+    /*.card.active .shadow{*/
+    /*  background: linear-gradient(to top, rgba(0, 0, 0, 0.35) 65%, transparent);*/
+    /*}*/
+
+    .card.active .content{
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .card.active .content .text div{
+      opacity: 1;
+    }
+
+    @keyframes blink {
+      0%, 69%{
+        opacity: 0;
+      }
+      70%, 100%{
+        opacity: 1;
+      }
+    }
+
+    .code{
+      /* font-size: 16px; */
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      /* font-family: monospace; */
+      position: relative;
+    }
+
+    .code span {
+      --delay: 10s;
+
+      display: inline-block;
+      overflow: hidden;
+      width: 0ch;
+      animation: 0.1s text-in ease-in-out forwards;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes text-in {
+      from {
+        width: 0ch;
+      }
+      to {
+        width: 1.7ch;
+      }
+    }
+
+    .container{
+      display: flex;
+      width: 90%;
+      /* height: 80%; */
+      justify-content: center;
+    }
+
+    .itemGroup {
+      display: flex;
+      width: 1000vw;
+      max-width: 1200px;
+    }
+
+    .card{
+      position: relative;
+      /* 自动放大占满剩余空间 */
+      /* flex: 1; */
+      /* height: 90%; */
+      /* 设置视距 */
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+      perspective: 1000px;
+    }
+
+
+    @media screen and (max-width: 900px) {
+
+      .code{
+        font-size: 16px;
+      }
+
+      .container{
+        height: 80%;
+      }
+
+      .itemGroup {
+        flex-direction: column;
+      }
+
+      .card{
+        width: 95%;
+        min-height: 8%;
+        margin: 10px;
+        transition: 0.25s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+      }
+
+      .card.active{
+        left: 3%;
+        transform: rotateX(5deg) rotateY(-10deg) rotateZ(-3deg);
+        transition: transform 8.75s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      /* 投影效果 */
+      .card::before{
+        width: 100%;
+        left: 0%;
+      }
+
+      .card-cover{
+        transition: 100.9s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+      }
+
+      /*.card.active::before {*/
+      /*  opacity: 0.6;*/
+      /*  transform: rotateX(7deg) translateY(-6px) scale(1.05);*/
+      /*}*/
+
+      /*.card.active .card-cover{*/
+      /*  transform: rotateX(7deg) translateY(-6px);*/
+      /*}*/
+
+    }
+
+    @media screen and (min-width: 901px) {
+
+      .code{
+        font-size: 32px;
+      }
+
+      .itemGroup{
+        height: 400px;
+      }
+
+      .container{
+        max-width: 1200px;
+        height: 400px;
+      }
+
+      .card{
+        width: 80px;
+        margin: 25px;
+        transition: 0.35s ease-in-out;
+      }
+
+      .card.active{
+        /* left: 3%; */
+        /* transform: rotateX(360deg); */
+        transform: rotateX(5deg) rotateY(-10deg) rotateZ(-3deg);
+        transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      /* 投影效果 */
+      .card::before{
+        width: 90%;
+        /* 绝对定位 */
+        left: 5%;
+      }
+
+      .card-cover{
+        transition: 100.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+      }
+
+      .card.active::before{
+        content: "";
+        width: 90%;
+        height: 90%;
+        background-color: rgba(0,0,0,0.5);
+
+        position: absolute;
+        left: 5%;
+        top: 3%;
+        opacity: 1;
+
+        transform-origin: top center;
+
+        transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+        box-shadow: 0 10px 36px 24px rgba(0,0,0,0.4);
+      }
+
+
+      .card-cover::after{
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 450%;
+        /* 背景渐变(高光效果) */
+        background: linear-gradient(226deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.5) 50%,rgba(255,255,255,0) 60%);
+        /* 默认上移出可视范围 */
+        transform: translateY(-100%);
+        /* 设置过渡 */
+        transition: transform 0.75s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+      .card:hover .card-cover{
+        transform: rotateX(7deg) translateY(-6px);
+      }
+      .card:hover .card-cover::after{
+        transform: translateY(100%);
+      }
+
+      /* 鼠标移上,投影的变化 */
+      .card:hover::before{
+        opacity: 0.6;
+        transform: rotateX(7deg) translateY(-6px) scale(1.05);
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+<div class="inputArea" id="inputarea">
+  <div class="code active" id="code"></div>
+</div>
+
+<div class="container">
+  <div class="itemGroup">
+    <div class="card active">
+      <div class="card-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/YouthLearn.jpg);">
+        <!-- <div class="item-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/sun.webp);"> -->
+        <div class="shadow"></div>
+        <div class="content">
+          <div class="icon" style="--bgColorItem: #46b886;">
+            <i class="fa fa-solid fa-child-reaching"></i>
+            <!-- <i class="fa fa-sun-o"></i> -->
+          </div>
+          <div class="text">
+            <div class="tit">青年大摸鱼</div>
+            <div class="sub">青年大学习定时自动学习</div>
+          </div>
+        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/tencentmeeting.jpg);">
+        <div class="shadow"></div>
+        <div class="content">
+          <div class="icon" style="--bgColorItem: #f54888;">
+            <i class="fa fa-cloud"></i>
+          </div>
+          <div class="text">
+            <div class="tit">花果山高级会议</div>
+            <div class="sub">腾讯会议定时自动挂机</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/rain.webp);">
+        <div class="shadow"></div>
+        <div class="content">
+          <div class="icon" style="--bgColorItem: #4343f5;">
+            <i class="fa fa-tint"></i>
+          </div>
+          <div class="text">
+            <div class="tit">这是标题</div>
+            <div class="sub">这是一段描述</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/bolt.webp);">
+        <div class="shadow"></div>
+        <div class="content">
+          <div class="icon" style="--bgColorItem: #e0b115;">
+            <i class="fa fa-bolt"></i>
+          </div>
+          <div class="text">
+            <div class="tit">这是标题</div>
+            <div class="sub">这是一段描述</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-cover" style="background-image: url(https://have1.coding.net/p/image/d/image/git/raw/master/snow.jpeg);">
+        <div class="shadow"></div>
+        <div class="content">
+          <div class="icon" style="--bgColorItem:#34495d;">
+            <i class="fa fa-snowflake-o"></i>
+          </div>
+          <div class="text">
+            <div class="tit">这是标题</div>
+            <div class="sub">这是一段描述</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<script type="text/javascript">
+  const items = document.querySelectorAll('.card');
+  const container = document.querySelector('.container');
+  const body = document.body;
+  const bgColorsBody = ["#46b886", "#ff96bd", "#9999fb", "#e8883c", "#34495d"];
+  let codes =
+          [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ];
+  let activeItem = container.querySelector(".active");
+  let routes;
+
+  $.post({
+    url: "/function/getValue",
+    data: null,
+    success: function (data) {
+      let code1 = data.codes[0].replace(/\S/g, "<span>$&</span>")
+              .replace(/\s/g, "<span>&nbsp;</span>");
+      let commaList = searchChar(data.codes[0]);
+
+      codes = data.codes;
+      routes = data.routes;
+
+      let code = document.querySelector('.code');
+      code.innerHTML = code1;
+      let delay = 0
+      document.querySelectorAll('span').forEach((span, index) => {
+
+        delay += 0.1
+        commaList.forEach( (i) => {
+          if (index === i) delay += 0.3;
+        })
+        span.style.setProperty('--delay', `${delay}s`)
+      })
+    }
+  })
+
+  function setActive(item, index) {
+
+    if (activeItem === item) window.location = routes[index];
+
+    if(activeItem) activeItem.classList.remove("active");
+
+    // console.log(inputArea.offsetWidth/codes[index].length);
+
+    enableCode(index);
+
+    item.classList.add("active");
+    body.style.backgroundColor = bgColorsBody[index]
+    activeItem = item;
+  }
+
+  items.forEach((item, index)=>{
+    item.addEventListener('click', () => setActive(item, index))
+  })
+
+  function enableCode(index){
+    let code = document.querySelector('.code');
+    code.innerHTML = codes[index].replace(/\S/g, "<span>$&</span>")
+            .replace(/\s/g, "<span>&nbsp;</span>");
+
+    let delay = 0
+    let commaList = searchChar(codes[index]);
+
+    document.querySelectorAll('span').forEach((span, index) => {
+      delay += 0.1
+
+      commaList.forEach( (i) => {
+        if (index === i) delay += 0.3;
+      })
+      span.style.setProperty('--delay', `${delay}s`)
+    })
+  }
+
+  function searchChar(str) {
+    //0, 15, 6, 0, 15, 6, 0
+    let index = 1, resultArray = [];
+    while(index !== 0) {
+      index = str.indexOf('，', index) + 1;
+      if (index === 0) break;
+      resultArray.push(index);
+      console.log(resultArray)
+    }
+    index = 1;
+    while(index !== 0) {
+      index = str.indexOf(' ', index) + 1;
+      if (index === 0) break;
+      resultArray.push(index);
+      console.log(resultArray)
+    }
+    index = 1;
+    while(index !== 0) {
+      index = str.indexOf(',', index) + 1;
+      if (index === 0) break;
+      resultArray.push(index);
+      console.log(resultArray)
+    }
+    index = 1;
+    while(index !== 0) {
+      index = str.indexOf('-', index) + 1;
+      if (index === 0) break;
+      resultArray.push(index);
+      console.log(resultArray)
+    }
+    return resultArray;
+  }
+</script>
+</body>
+
+</html>

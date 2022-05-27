@@ -1,0 +1,93 @@
+spring:
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+  thymeleaf:
+    cache: false  #cache: 是否缓存，开发模式下设置为false，避免改了模板还要重启服务器，线上设置为true，可以提高性能。
+    #encoding: UTF-8
+    #content-type: text/html
+
+  datasource:
+    username: root
+    password: Justholdway521
+    url: jdbc:mysql://121.127.241.114:3306/mywebsite?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+#    url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+#    url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testwhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+    filters: stat,wall,10g4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  # 配置redis服务
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+  # 配置rabbitmq服务
+  rabbitmq:
+    username: guest
+    password: guest
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+
+  mail:
+    host: smtp.qq.com
+    username: haven_001@foxmail.com
+    password: dnzbdtwvzpdffagg
+    default-encoding: UTF-8
+    port: 587
+    properties:
+      mail:
+      smtp:
+      auth: false
+      socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+  mvc:
+#    view:
+#      prefix: classpath:/templates
+#      suffix: .html
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    static-path-pattern: /resources/**
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  port: 80
+
+# 配置MybatisPlus
+mybatis-plus:
+  mapper-locations:
+    - classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+

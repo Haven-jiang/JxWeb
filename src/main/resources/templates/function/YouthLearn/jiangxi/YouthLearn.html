@@ -1,0 +1,964 @@
+<html>
+<head>
+  <link rel="icon" href="/static/favicon6.svg" type="image/x-icon"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <style>
+    html {
+      --rotateY: 0;
+
+      --c-blue-900: #08205c;
+      --c-blue-800: #111b40;
+      --c-blue-700: #08205c;
+      --c-blue-500: #1d7bdb;
+      --c-blue-300: #293359;
+      --c-blue-200: #4e5985;
+      --c-blue-100: #dfe8ff;
+      --c-green-400: #4ade80;
+
+      --card-height: 65vh;
+      --card-width: calc(var(--card-height) / 1.5);
+
+      --test-card-width: 0.2;
+      --test-card-height: 0.2;
+
+      --test-card-moveX: 280px;
+      --test-card-moveY: 80px;
+
+      --secPer: 0;
+      --fontPer: 0;
+      --moveYPer: 0%;
+      --moveXPer: 0%;
+
+      --iphone-black-bg: #000;
+      --iphone-black-text: #f2f2f2;
+
+      --iphone-white-bg: #fff;
+      --iphone-white-text: #8b8b99;
+      --iphone-white-text-highlight: #1d1d1f;
+
+      --iphone-red-bg: #960b19;
+      --iphone-red-text: #e57571;
+      --iphone-red-text-highlight: #f5f5f7;
+
+      --iphone-width: 660px;
+      --iphone-offscreen: -720px;
+    }
+
+    :root {
+      font-size: 20px;
+      font-family: PingFangSC-Medium, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 3000px;
+      width: 100%;
+      /* height: 100%;
+      overflow: scroll; */
+      font-family: Helvetica;
+      background-color: #fff;
+    }
+
+    .sticky-container {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .endpage {
+      display: flex;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+
+      /* background-color: #960b19; */
+    }
+
+    .sticky-container .page {
+      display: block;
+      /* flex-direction: column;
+      justify-content: center;
+      align-items: center; */
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      background-color: #960b19;
+      clip-path: inset(calc(var(--moveYPer) * -1) calc(var(--moveXPer) * -1) 0px 0px);
+    }
+
+    .sticky-container .page > span{
+      font-size: 3rem;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-weight: calc(((var(--fontPer) + 12) * 10) * 0.8);
+      transform: translateX(calc(-50% + var(--secPer) * 1% + var(--rotateY) * -5%)) translateY(-50%);
+      transition: all .3s ease-in-out;
+      /* margin: 0 0 60px 0; */
+      /* width: 100vw; */
+
+      color: #8b8b99;
+    }
+
+
+    /* .atest::before {
+      content: '';
+      background: #003193;
+      filter: blur(10px);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+    } */
+
+
+
+    /* .atest.active {
+      width: 20vw;
+      height: 40vw;
+    } */
+
+    .sticky-container .page > span > span{
+      position: absolute;
+      width: 100%;
+      font-size: 2rem;
+      text-align: center;
+
+      /* margin: 0 0 60px 0; */
+      transform: translateX(calc(var(--fontPer) * -1%));
+    }
+
+    /* .sticky-container.no-sticky {
+      position: relative;
+      overflow: visible;
+    }
+
+    .sticky-container.no-sticky .page {
+      position: relative;
+    }
+
+    .sticky-container.no-sticky .page.red {
+      padding-bottom: calc(var(--iphone-offscreen) * -1);
+    } */
+    .endFont {
+      width: 880px;
+      font-size: 65px;
+      font-weight: 100;
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      color: #1d1d1f;
+    }
+
+    .mask {
+      height: 65px;
+      position: relative;
+      overflow: hidden;
+      margin-top: var(--offset);
+    }
+
+    .mask span {
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      top: 65px;
+      padding-bottom: var(--offset);
+
+      background-size: 100% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-repeat: no-repeat;
+    }
+
+    .mask span[data-show] {
+      transform: translateY(-100%);
+      transition: .5s transform ease-in-out;
+    }
+
+    .mask span[data-up] {
+      transform: translateY(-200%);
+      transition: .5s transform ease-in-out;
+    }
+
+    .mask span:nth-child(1) {
+      background-image: linear-gradient(45deg, #0ecffe 50%, #07a6f1);
+    }
+
+    .mask span:nth-child(2) {
+      background-image: linear-gradient(45deg, #18e198 50%, #0ec15d);
+    }
+
+    .mask span:nth-child(3) {
+      background-image: linear-gradient(45deg, #8a7cfb 50%, #633e9c);
+    }
+
+    .mask span:nth-child(4) {
+      background-image: linear-gradient(45deg, #fa7671 50%, #f45f7f);
+    }
+
+    .mask span:nth-child(5) {
+      background-image: linear-gradient(45deg, #f25a76 50%, #dd2d47);
+    }
+
+    .mask span:nth-child(6) {
+      background-image: linear-gradient(45deg, #1588ee 50%, #002385);
+    }
+
+    .mask span:nth-child(7) {
+      background-image: linear-gradient(45deg, #eb6888 50%, #c36ee0);
+    }
+
+
+    /* button */
+
+    @media screen and (max-width: 1000px) {
+      .pcard {
+        transform: translateX(calc(var(--test-card-moveX) + var(--rotateY) * 3%)) translateY(var(--test-card-moveY));
+      }
+      .sticky-container .page .pcard .price-table{
+        width: calc(var(--test-card-width) * 2vw);
+        height: calc(var(--test-card-height) * 1.6vw);
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      .pcard {
+        transform: translateX(calc(var(--test-card-moveX) + var(--rotateY) * 3%)) translateY(var(--test-card-moveY)) rotateZ(calc(var(--rotateY)*12deg));
+      }
+      .sticky-container .page .pcard .price-table{
+        width: calc(var(--test-card-width) * 1.2vw);
+        height: calc(var(--test-card-height) * 15.86px);
+      }
+    }
+    /*
+    .sticky-container .page .atest {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: scroll;
+      top: 50%;
+      left: 50%;
+      transform: translateX(var(--test-card-moveX)) translateY(var(--test-card-moveY));
+      border-radius: 15px;
+      transition: all .3s ease-in-out;
+    } */
+
+
+    @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
+    *,
+    *:before,
+    *:after {
+      box-sizing: border-box;
+    }
+
+    .pcard {
+      line-height: 1.5;
+      font-family: "Outfit", sans-serif;
+      font-size: 15px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* transform: translateX(-50%) translateY(-50%); */
+      -webkit-transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      overflow: hidden;
+      transform-origin: top;
+      /* transform: translateX(calc(var(--test-card-moveX) + var(--rotateY) * 3%)) translateY(var(--test-card-moveY)) rotateY(calc(var(--rotateY)*12deg)); */
+
+
+      color: var(--c-main-text);
+    }
+
+    .pcard.active {
+      padding: 10px;
+    }
+
+    /* End basic CSS override */
+    .price-table {
+      border-radius: 16px;
+      max-width: 326px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.15);
+      position: relative;
+
+
+      background-color: var(--c-blue-700);
+      /* background-image: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(29, 123, 219, 0.1) 20%, var(--c-blue-700) 40%, var(--c-blue-700) 100%); */
+    }
+
+    .price-table:after {
+      content: "";
+      display: block;
+      top: -10px;
+      left: -10px;
+      bottom: -10px;
+      right: -10px;
+      z-index: -1;
+      position: absolute;
+      border-radius: 16px;
+
+      background-color: var(--c-blue-600);
+      /* background-image: linear-gradient(135deg, var(--c-green-400), var(--c-blue-500) 40%, var(--c-blue-300) 60%, var(--c-blue-700) 100%); */
+    }
+    .price-table .price {
+      font-size: 3rem;
+      line-height: 1;
+      font-weight: 100;
+      display: inline-flex;
+      align-self: center;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+      transition: all .5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .price-table .price:hover {
+      font-weight: 900;
+    }
+
+    .price-table .price small {
+      font-size: 1.25rem;
+      font-weight: 400;
+      position: absolute;
+      left: -1.5ch;
+    }
+    .price-table .title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.25;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .price-table .description {
+      font-size: 1rem;
+      font-weight: 100;
+      text-align: center;
+      margin-top: 4px;
+      transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    .price-table .description:hover {
+      font-weight: 500;
+    }
+
+    .features {
+      margin-top: 32px;
+    }
+
+    .feature {
+      position: relative;
+    }
+    .feature + .feature {
+      margin-top: 16px;
+    }
+    .feature summary {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      list-style: none;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .feature summary .button {
+      font-size: xx-large;
+      font-weight: 100;
+      color: var(--c-major-text);
+      background-color: transparent;
+      border-color: transparent;
+      transition: all .5s cubic-bezier(0.39, 0.575, 0.565, 1);
+      text-decoration: none;
+    }
+
+
+    .feature summary .button:hover {
+      font-weight: 900;
+    }
+
+    .feature summary::-webkit-details-marker {
+      display: none;
+    }
+    .feature[open] summary:after {
+      content: "";
+      display: block;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      position: fixed;
+      z-index: 50;
+    }
+    .feature[open] div {
+      -webkit-animation: scale 0.15s ease;
+      animation: scale 0.15s ease;
+    }
+
+    .feature .answer {
+      padding: 12px;
+      color: var(--c-major-text);
+      background-color: var(--c-blue-700);
+      border-radius: 6px;
+      position: absolute;
+      top: -12px;
+      z-index: 100;
+      transform: translatey(-100%) translatex(-50%);
+      transform-origin: bottom center;
+      width: 80%;
+      left: 50%;
+      border: 1px solid var(--c-major-text);
+      box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    @-webkit-keyframes scale {
+      0% {
+        transform: translatey(-100%) translatex(-50%) scale(0);
+      }
+      100% {
+        transform: translatey(-100%) translatex(-50%) scale(1);
+      }
+    }
+
+    @keyframes scale {
+      0% {
+        transform: translatey(-100%) translatex(-50%) scale(0);
+      }
+      100% {
+        transform: translatey(-100%) translatex(-50%) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="sticky-container">
+  <div class="page">
+        <span>青年大学习<br>
+          <span>－敬请期待</span>
+        </span>
+    <div class="pcard">
+      <article class="price-table">
+        <div class="price">敬请期待</div>
+        <h2 class="title">Coming soon</h2>
+        <p class="description">We're working on making this available more broadly!
+        </p>
+        <div class="features">
+          <details class="feature">
+            <summary>
+              <span class="name button">敬请期待</span>
+            </summary>
+            <div class="answer">
+              注册并添加你的定时
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">敬请期待</span>
+
+            </summary>
+            <div class="answer">
+              搜索你的定时信息
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">敬请期待</span>
+
+            </summary>
+            <div class="answer">
+              修改你的定时信息
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">敬请期待</span>
+
+            </summary>
+            <div class="answer">
+              想自己做?那么点击这个
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Asset Hosting</span>
+
+            </summary>
+            <div class="answer">
+              Keep your files for easy access and management. 5GB space included. Scale when necessary.
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Community support ®️</span>
+
+            </summary>
+            <div class="answer">
+              Get help and learn new things in our community Slack with over 5,000 contributors.
+            </div>
+          </details>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="page">
+        <span>青年大学习<br>
+          <span>－内蒙古</span>
+        </span>
+    <div class="pcard">
+      <article class="price-table">
+        <div class="price">内蒙古</div>
+        <h2 class="title">Inner Mongolia</h2>
+        <p class="description">通过下面的功能可以配置对应的属性
+        </p>
+        <div class="features">
+          <details class="feature">
+            <summary>
+              <span class="name button">注册</span>
+            </summary>
+            <div class="answer">
+              敬请期待
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">查找</span>
+
+            </summary>
+            <div class="answer">
+              敬请期待
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">修改</span>
+
+            </summary>
+            <div class="answer">
+              敬请期待
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name button">删除</span>
+
+            </summary>
+            <div class="answer">
+              敬请期待
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Asset Hosting</span>
+
+            </summary>
+            <div class="answer">
+              Keep your files for easy access and management. 5GB space included. Scale when necessary.
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Community support ®️</span>
+
+            </summary>
+            <div class="answer">
+              Get help and learn new things in our community Slack with over 5,000 contributors.
+            </div>
+          </details>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="page">
+        <span>青年大学习<br>
+          <span>－江西省</span>
+        </span>
+
+
+    <div class="pcard">
+      <article class="price-table">
+        <div class="price">江西省</div>
+        <h2 class="title">Province JiangXi</h2>
+        <p class="description">通过下面的功能可以配置对应的属性
+        </p>
+        <div class="features">
+          <details class="feature">
+            <summary>
+              <a class="name button" href="/function/youthlearn/jiangxi/register_page">注册</a>
+            </summary>
+            <div class="answer">
+              注册并添加你的定时
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <a class="name button" href="/function/youthlearn/jiangxi/query_page">查找</a>
+
+            </summary>
+            <div class="answer">
+              搜索你的定时信息
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <a class="name button" href="/function/youthlearn/jiangxi/query_page">修改</a>
+
+            </summary>
+            <div class="answer">
+              修改你的定时信息
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <a class="name button">删除</a>
+
+            </summary>
+            <div class="answer">
+              想自己做?那么点击这个
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Asset Hosting</span>
+
+            </summary>
+            <div class="answer">
+              Keep your files for easy access and management. 5GB space included. Scale when necessary.
+            </div>
+          </details>
+          <details class="feature">
+            <summary>
+
+              <span class="name">Community support ®️</span>
+
+            </summary>
+            <div class="answer">
+              Get help and learn new things in our community Slack with over 5,000 contributors.
+            </div>
+          </details>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="page">
+        <span>青年大學習<br>
+          <span>下滑選擇省份</span>
+        </span>
+    <div class="pcard">
+      <article class="price-table"></article>
+      <!-- <article class="price-table"></article> -->
+    </div>
+  </div>
+
+  <div class="endpage">
+    <h2 class="endFont">
+      所有支持的省份<br>
+      就到这
+      <div class="mask">
+        <span data-show>为止了.</span>
+        <span>结束啦.</span>
+        <span>刚刚好.</span>
+        <span>吧再爱就不礼貌了.</span>
+        <span>里吧.</span>
+        <span>个路口.</span>
+        <span>吧送你的灰太狼气球过时了.</span>
+      </div>
+    </h2>
+  </div>
+</div>
+
+<script>
+  let pages = document.querySelectorAll('.sticky-container .page')
+
+  let cardOX = (pages[pages.length-1].querySelector('span').offsetWidth + pages[pages.length-1].querySelector('span').querySelector('span').offsetWidth)/2 -20
+
+  let cardOY = (pages[pages.length-1].querySelector('span').offsetHeight + pages[pages.length-1].querySelector('span').querySelector('span').offsetHeight)/2 +10
+
+  let movex = false;
+
+  let pageHeight = (document.body.scrollHeight - document.body.clientHeight) / pages.length
+
+  let pagen = [];
+
+  let backgroundColors = [
+    "#000",
+    "#960b19",
+    "#08205c",
+    "#021512",
+  ]
+
+  let textColors = [
+    "#86868b",
+    "#e57571",
+    "#003193",
+    "#083621",
+  ]
+
+  let textHighlightColors = [
+    "#f2f2f2",
+    "#f5f5f7",
+    "#8ce9fe",
+    "#22be88",
+  ]
+
+  let cardBackGroundColors = [
+    "#86868b",
+    "#e57571",
+    "#08205c",
+    "#083621",
+  ]
+
+  let cardFrameColors = [
+    "#86868b",
+    "#e57571",
+    "#003193",
+    "#083621",
+  ]
+
+  let cardMainTextColors = [
+    "#000",
+    "#960b19",
+    "#0076ea",
+    "#2dbe8b",
+  ]
+
+
+  let cardFunctionTextColors = [
+    "#fff",
+    "#000",
+    "#fff",
+    "#2dbe8b",
+  ]
+
+  let ban = 0;
+
+  for (let ac = 0; ac < pages.length+1; ac++) {
+    pagen.push(ac * pageHeight);
+  }
+
+  pages.forEach((page, index) => {
+    page.style.backgroundColor = backgroundColors[index];
+    page.style.zIndex = `${index + 1}`
+    page.querySelector('span').style.color = textColors[index];
+
+
+    page.querySelector('.pcard').style.setProperty('--c-blue-700', index === pages.length-1 ? textHighlightColors[index] : cardBackGroundColors[index]);
+    page.querySelector('.pcard').style.setProperty('--c-blue-600', index === pages.length-1 ? textHighlightColors[index] : cardFrameColors[index]);
+    page.querySelector('.pcard').style.setProperty('--c-main-text', cardMainTextColors[index]);
+    page.querySelector('.pcard').style.setProperty('--c-major-text', cardFunctionTextColors[index]);
+    // page.querySelector('.pcard').style.background = theCardColors[index];
+    page.querySelector('.pcard').style.setProperty('--test-card-option-color', textHighlightColors[index]);
+    page.querySelector('.pcard').style.setProperty('--test-card-moveX', `${cardOX}px`)
+    page.querySelector('.pcard').style.setProperty('--test-card-moveY', `${cardOY}px`)
+    page.querySelector('span').querySelector('span').style.color = textHighlightColors[index];
+
+    page.querySelector('.pcard').style.width = '5px';
+    page.querySelector('.pcard').style.height = '5px';
+  })
+
+  window.addEventListener('scroll', (e) => {
+
+    // console.log(document.body.scrollTop)
+
+    let noStickyOffset = document.body.scrollHeight - document.body.clientHeight
+    let scrolled = document.body.scrollTop / noStickyOffset
+
+    // if(document.body.scrollTop > pagen[ban+1] * 0.95) {
+    //   document.body.scrollTop = pagen[++ban];
+    // }
+    // if(document.body.scrollTop < pagen[ban] * 0.95) {
+    //   document.body.scrollTop = pagen[--ban];
+    // }
+    // if(document.body.scrollTop < pagen[ban] * 1.035 && document.body.scrollTop > pagen[ban] * 0.965) {
+    //   document.body.scrollTop = pagen[ban];
+    // }
+    // console.log('ban: ' + ban + ' scrollTop: ' + document.body.scrollTop)
+
+    // console.log(scrolled)
+
+    // console.log(noStickyOffset)
+    // console.log(document.body.scrollHeight)
+    // console.log(document.body.clientHeight)
+    // console.log(document.body.scrollTop)
+
+    pages.forEach((page, index) => {
+      let moveYPer = (((0.25 * (pages.length - index - 1)) - scrolled) / 0.25) * 100;
+      let fontPer = moveYPer;
+      let secPer = 0;
+
+      let allPer = (((0.25 * (pages.length - index - 1)) - scrolled) / 0.25) * 100;
+      page.style.setProperty('--allPer', `${allPer}%`);
+
+
+
+      moveYPer = moveYPer >= 100 ? 100 : moveYPer;
+      moveYPer = moveYPer <= -100 ? -100 : moveYPer;
+      // console.log(index + ': ' + moveYPer)
+
+      if(movex) {
+        // if(index === (pages.length - 2)) page.style.setProperty('--moveYPer', `0%`);
+        page.style.setProperty('--moveXPer', `${moveYPer}%`);
+        if(index !== pages.length-1 && index !== 0) {
+
+          let rotatePer = index % 2 === 0 ? ((moveYPer <= -60 ? -60 : (moveYPer >= -30 ? -30 : moveYPer))+30) : ((moveYPer <= 40 ? 40 : (moveYPer >= 70 ? 70 : moveYPer))-70);
+          let reRotatePer = index % 2 === 0 ? -((moveYPer <= 40 ? 40 : (moveYPer >= 70 ? 70 : moveYPer))-40) : -((moveYPer <= -60 ? -60 : (moveYPer >= -30 ? -30 : moveYPer))+60);
+
+          if(allPer <= 0 && allPer >= -100) {
+            pages.forEach((pagenp) => {
+              pagenp.style.setProperty('--rotateY', `${index % 2 === 0 ? rotatePer : reRotatePer}`);
+            })
+          }
+          // page.style.setProperty('--rotateY', `${rotatePer}`);
+          // console.log('all--' + index + ': ' + `${allPer}`)
+          // console.log('a--rotateY' + index + ': ' + `${rotatePer}`)
+          // console.log('b--rotateY' + index + ': ' + `${reRotatePer}`)
+        }else if(index !== pages.length-1) {
+          pages.forEach((pagenp) => {
+            pagenp.style.setProperty('--rotateY', `${0}`);
+          })
+        }
+        // if(index % 2 === 0) {
+        //   console.log('rotateY' + index + ': ' + `${(moveYPer <= -60 ? -60 : (moveYPer >= -30 ? -30 : moveYPer))+30}`);
+
+        // }else {
+        //   console.log('rotateY' + index + ': ' + `${(moveYPer <= 40 ? 40 : (moveYPer >= 70 ? 70 : moveYPer))-70}`)
+        //   page.style.setProperty('--rotateY', `${((moveYPer <= 40 ? 40 : (moveYPer >= 70 ? 70 : moveYPer))-70)}`);
+        // }
+      }
+      else {
+        if(index === (pages.length - 1)) page.style.setProperty('--moveXPer', `0%`);
+        if(index === (pages.length - 2)) moveYPer = moveYPer < 0 ? 0 : moveYPer;
+        // moveYPer = allPer < 0.001 ? allPer : 0;
+        page.style.setProperty('--moveYPer', `${moveYPer}%`);
+      }
+
+
+
+      // if(index === length-1 && moveYPer === -100) movex = true;
+
+      if(index === (pages.length - 1)) {
+        if(moveYPer >= 0) fontPer = 0;
+        else if(moveYPer <= -75) fontPer = -75;
+        if(moveYPer === -100) movex = true;
+      }
+
+      if(index === (pages.length - 2)) {
+        if(moveYPer >= 0) movex = false;
+
+        secPer = 100 - moveYPer;
+        // console.log('secPer1: ' + secPer)
+        if(secPer >= 100) secPer = 100;
+        else if(secPer <= 54) secPer = 0;
+
+        let cardConPer = (secPer - 50) <= 0 ? 0 : (secPer - 50);
+
+        // console.log('secPer2: ' + secPer)
+        pages.forEach((pagenp) => {
+          pagenp.style.setProperty('--secPer', `${-secPer}`);
+          if(cardConPer <= 0) disCard()
+          else { //card 激活
+            let cardFangdaPer = (cardConPer - 10) <= 0 ? 0 : (cardConPer - 10);
+            // console.log('con: ' + cardConPer + 'cardFangda: ' + cardFangdaPer);
+
+            pagenp.querySelector('.pcard').classList.add('active');
+            pagenp.querySelector('.pcard').style.width = '';
+            pagenp.querySelector('.pcard').style.height = '';
+            pagenp.querySelector('.pcard').style.setProperty('--test-card-width', `${cardFangdaPer/2}`);
+            pagenp.querySelector('.pcard').style.setProperty('--test-card-height', `${cardFangdaPer}`);
+            pagenp.querySelector('.pcard').style.setProperty('--test-card-moveX', `${-(cardConPer * 2) / 5}%`);
+            pagenp.querySelector('.pcard').style.setProperty('--test-card-moveY', `${-cardConPer}%`);
+          }
+          // pagenp.style.setProperty('--fontPer', `${-fontPer}`)
+        })
+        // if(moveYPer)
+      }
+      pages.forEach((pagenp) => {
+        pagenp.style.setProperty('--fontPer', `${-fontPer}`)
+      })
+    })
+
+    // if (scrolled >= 1) {
+    //   document.querySelector('.sticky-container').classList.add('no-sticky')
+    //   pages.forEach((page, index) => {
+    //     if(index === 0) page.style.paddingBottom = '-720px';
+    //   })
+    // } else {
+    //   document.querySelector('.sticky-container').classList.remove('no-sticky')
+    // }
+  })
+
+  function enCard(cardConPer) {
+
+    pages.forEach((page, index) => {
+      let cardFangdaPer = (cardConPer - 60) <= 0 ? 0 : (cardConPer - 60);
+      page.querySelector('.atest').style.width = `${cardFangdaPer/2}vw`;
+      page.querySelector('.atest').style.height = `${cardFangdaPer}vw`;
+      pagenp.querySelector('.atest').style.setProperty('--test-card-moveX', `${-(cardConPer * 2) / 5}%`);
+      pagenp.querySelector('.atest').style.setProperty('--test-card-moveY', `${-cardConPer}%`);
+    })
+
+  }
+
+  function disCard() {
+    pages.forEach((page, index) => {
+      page.querySelector('.pcard').classList.remove('active');
+      page.querySelector('.pcard').style.setProperty('--test-card-width', '0.3');
+      page.querySelector('.pcard').style.setProperty('--test-card-height', '0.3');
+      page.querySelector('.pcard').style.width = '5px';
+      page.querySelector('.pcard').style.height = '5px';
+      page.querySelector('.pcard').style.setProperty('--test-card-moveX', `${cardOX}px`)
+      page.querySelector('.pcard').style.setProperty('--test-card-moveY', `${cardOY}px`)
+    })
+  }
+</script>
+<script>
+
+  setInterval(function () {
+    const show = document.querySelector('span[data-show]')
+    // console.log(show.nextElementSibling)
+    // console.log(document.querySelector('.mask > span:first-child'))
+    const next = show.nextElementSibling || document.querySelector('.mask > span:first-child')
+    const up = document.querySelector('span[data-up]')
+
+    if (up) {
+      up.removeAttribute('data-up')
+    }
+
+    show.removeAttribute('data-show')
+    show.setAttribute('data-up', '')
+
+    next.setAttribute('data-show', '')
+  }, 2000)
+</script>
+
+</body>
+</html>

@@ -1,0 +1,681 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* 100%窗口高度 */
+  height: 100vh;
+  /* width: 50%; */
+  /* 弹性布局 水平+垂直布局 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 径向渐变背景 */
+  background: #46b886;
+  -webkit-tap-highlight-color: transparent;
+  transition: 1.7s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+  flex-direction: column;
+}
+
+.inputArea{
+  justify-content: center;
+  align-items: center;
+  /* width: 50%; */
+  position: relative;
+  top: -5%;
+  /* font: normal 100% Helvetica, Arial, sans-serif;; */
+}
+
+.code{
+  --count: 13;
+  --exetime: 3s;
+  --fontsize: 31px;
+  --areawidth: 50%;
+
+  /* 相对定位 */
+  color: rgb(249, 249, 249);
+  font-size: var(--fontsize);
+  /* 字间距 */
+  letter-spacing: 1px;
+  /* 单个字宽度 */
+  width: var(--fontwidth);
+  /* 不换行 */
+  white-space: nowrap;
+  /* 溢出隐藏 */
+  overflow: hidden;
+  /* 自定义属性(变量),通过var函数进行调用,这里用来记录字数(6个字,根据你的实际字数而定) */
+  /* 执行动画: 动画名 时长 分步过渡(这里分6步) 停留在最后一帧 */
+  animation: typing var(--exetime) steps(var(--count)) forwards;
+  /* 时长要根据字数而定,字数多的话要适当延长 */
+  /* 加个倒影可能会比较好看 */
+  -webkit-box-reflect: below 1px linear-gradient(transparent 30%,rgba(0,0,0,0.05));
+}
+.code.active{
+  /* 自定义属性(变量),通过var函数进行调用,这里用来记录字数(6个字,根据你的实际字数而定) */
+  --count: 13;
+  --exetime: 3s;
+  /* 执行动画: 动画名 时长 分步过渡(这里分6步) 停留在最后一帧 */
+  /* 时长要根据字数而定,字数多的话要适当延长 */
+  animation: typingac var(--exetime) steps(var(--count)) forwards;
+}
+
+/* 光标 */
+.code::after{
+  content: "";
+  width: 2px;
+  height: 75%;
+  position: absolute;
+  top: 7px;
+  right: 0;
+  background-color: rgb(247, 243, 243);
+  /* 执行光标动画: 动画名 时长 线性的 无限次播放 */
+  animation: blink 1s linear infinite;
+}
+
+@media screen and (max-width: 900px) {
+  .container{
+    /* 弹性布局 默认水平排列 */
+    display: flex;
+    width: 90%;
+    /* max-width: 1200px; */
+    height: 80%;
+    justify-content: center;
+    /* 溢出隐藏 */
+    /* overflow: hidden; */
+  }
+  .itemGroup {
+    display: flex;
+    width: 1000vw;
+    max-width: 1000px;
+    /* height: 400px; */
+    flex-direction: column;
+    /* overflow: hidden; */
+  }
+  .card{
+    position: relative;
+    width: 95%;
+    min-height: 9%;
+    /* 自动放大占满剩余空间 */
+    /* flex: 1; */
+    /* height: 90%; */
+    margin: 7px;
+    /* 设置视距 */
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+    perspective: 1000px;
+  }
+
+  .card.active{
+    flex: 1;
+    margin: 0;
+    left: 1%;
+  }
+
+  .card.active::before{
+    content: "";
+    width: 100%;
+    height: 90%;
+    background-color: rgba(0,0,0,0.5);
+
+    position: absolute;
+    left: 0%;
+    top: 8%;
+
+    box-shadow: 0 6px 12px 12px rgba(0,0,0,0.4);
+    opacity: 1;
+
+    transform-origin: top center;
+
+    transition: 0.3s ease-in-out;
+  }
+
+  /* 投影效果 */
+  .card::before{
+    content: "";
+    width: 100%;
+    height: 90%;
+    background-color: rgba(0,0,0,0.5);
+    /* 绝对定位 */
+    position: absolute;
+    left: 0%;
+    top: 5%;
+    /* 投影 */
+    box-shadow: 0 6px 12px 12px rgba(0,0,0,0.4);
+    opacity: 1;
+    /* 设置旋转元素的基点位置 */
+    transform-origin: top center;
+    /* 设置过渡:时长 加速后减速 */
+    transition: 0.3s ease-in-out;
+  }
+
+  .card:hover::before{
+    opacity: 0.6;
+    transform: rotateX(7deg) translateY(-6px) scale(1.05);
+  }
+
+  .card-cover{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    /* 溢出隐藏 */
+    overflow: hidden;
+    /* 开启3D */
+    transform-style: preserve-3d;
+    /* 设置旋转元素的基点位置 */
+    transform-origin: top center;
+    /* 设置过渡 */
+    transition: transform 0.35s ease-in-out;
+  }
+
+  .card-cover::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 120%;
+    /* 背景渐变(高光效果) */
+    background: linear-gradient(226deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.3) 50%,rgba(255,255,255,0) 60%);
+    /* 默认上移出可视范围 */
+    transform: translateY(-100%);
+    /* 设置过渡 */
+    transition: transform 0.85s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .card:hover .card-cover{
+    transform: rotateX(7deg) translateY(-6px);
+  }
+  .card:hover .card-cover::after{
+    transform: translateY(100%);
+  }
+  .card .content{
+    display: flex;
+    position: absolute;
+    left: 14px;
+    right: 0;
+    bottom: 167px;
+    height: 42px;
+    transition: 0.7s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+
+    /* display: flex;
+    position: absolute;
+    left: 10px;
+    right: 0;
+    bottom: 10px;
+    height: 40px;
+    transition: 1.5s cubic-bezier(0.05, 0.61, 0.41, 0.95); */
+  }
+
+  .card .content .icon{
+
+    min-width: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bgColorItem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+
+    /* min-width: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bgColorItem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px; */
+  }
+
+  .card:nth-child(1) .fa{
+    color: #fff;
+  }
+  .card:nth-child(2) .fa{
+    color: #fff;
+  }
+  .card:nth-child(3) .fa{
+    color: #fff;
+  }
+  .card:nth-child(4) .fa{
+    color: #fff;
+  }
+  .card:nth-child(5) .fa{
+    color: #fff;
+  }
+
+  .card .content .text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10px;
+    color: #fff;
+    width: 100%;
+  }
+
+  .card .content .text div{
+    /* 超出显示省略号 (需要设置width) */
+    width: 1080px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+
+  .card .content .text .tit{
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .card .content .text .sub{
+    /* 设置过渡效果延迟 */
+    transition-delay: 0.1s;
+  }
+
+  .card.active{
+    flex: 1;
+    margin: 0;
+    border-radius: 30px;
+  }
+
+  .card.active .shadow{
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.35) 65%, transparent);
+  }
+
+  .card.active .content{
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .card.active .content .text div{
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 901px) {
+
+  .itemGroup{
+    /* 弹性布局 默认水平排列 */
+    display: flex;
+    width: 1000vw;
+    max-width: 1000px;
+    height: 400px;
+    /* 溢出隐藏 */
+    /* overflow: hidden; */
+  }
+
+  .container{
+    /* 弹性布局 默认水平排列 */
+    display: flex;
+
+    width: 90%;
+    max-width: 1200px;
+    height: 400px;
+    justify-content: center;
+    /* 溢出隐藏 */
+    /* overflow: hidden; */
+  }
+
+  .item{
+    /* 相对定位 */
+    position: relative;
+    width: 80px;
+    margin: 15px;
+    cursor: pointer;
+    border-radius: 25px;
+    /* 保持原有尺寸比例, 裁剪长边 */
+    background-size: cover;
+    /* 定为背景图为正中间 */
+    background-position: center;
+    /* 过渡效果: 时长 贝塞尔曲线 */
+    transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+    overflow: hidden;
+  }
+
+  .item .shadow{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+
+  }
+
+  .card{
+    /* 相对定位 */
+    position: relative;
+    width: 80px;
+    /* 自动放大占满剩余空间 */
+    /* flex: 1; */
+    /* height: 90%; */
+    margin: 15px;
+    /* 设置视距 */
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+    perspective: 1000px;
+  }
+
+  .card.active{
+    flex: 1;
+    margin: 0;
+  }
+
+  /* 投影效果 */
+  .card::before{
+    content: "";
+    width: 90%;
+    height: 90%;
+    background-color: rgba(0,0,0,0.5);
+    /* 绝对定位 */
+    position: absolute;
+    left: 5%;
+    top: 5%;
+    /* 投影 */
+    box-shadow: 0 6px 12px 12px rgba(0,0,0,0.4);
+    opacity: 1;
+    /* 设置旋转元素的基点位置 */
+    transform-origin: top center;
+    /* 设置过渡:时长 加速后减速 */
+    transition: 0.3s ease-in-out;
+  }
+
+  /* .card.active::before{
+    content: "";
+    width: 80%;
+    height: 90%;
+    background-color: rgba(0,0,0,0.5);
+
+    position: absolute;
+    left: 10%;
+    top: 5%;
+
+    box-shadow: 0 6px 12px 12px rgba(0,0,0,0.4);
+    opacity: 1;
+
+    transform-origin: top center;
+
+    transition: 0.3s ease-in-out;
+  } */
+
+  /* 鼠标移上,投影的变化 */
+  .card:hover::before{
+    opacity: 0.6;
+    transform: rotateX(7deg) translateY(-6px) scale(1.05);
+  }
+
+  .card-cover{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    /* 溢出隐藏 */
+    overflow: hidden;
+    /* 开启3D */
+    transform-style: preserve-3d;
+    /* 设置旋转元素的基点位置 */
+    transform-origin: top center;
+    /* 设置过渡 */
+    transition: transform 0.35s ease-in-out;
+  }
+
+  .card-cover::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 120%;
+    /* 背景渐变(高光效果) */
+    background: linear-gradient(226deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.3) 50%,rgba(255,255,255,0) 60%);
+    /* 默认上移出可视范围 */
+    transform: translateY(-100%);
+    /* 设置过渡 */
+    transition: transform 0.85s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .card:hover .card-cover{
+    transform: rotateX(7deg) translateY(-6px);
+  }
+  .card:hover .card-cover::after{
+    transform: translateY(100%);
+  }
+  .card .content{
+    display: flex;
+    position: absolute;
+    left: 14px;
+    right: 0;
+    bottom: 167px;
+    height: 42px;
+    transition: 0.7s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+
+    /* display: flex;
+    position: absolute;
+    left: 10px;
+    right: 0;
+    bottom: 10px;
+    height: 40px;
+    transition: 1.5s cubic-bezier(0.05, 0.61, 0.41, 0.95); */
+  }
+
+  .card .content .icon{
+
+    min-width: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bgColorItem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+
+    /* min-width: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bgColorItem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px; */
+  }
+
+  .card:nth-child(1) .fa{
+    color: #fff;
+  }
+  .card:nth-child(2) .fa{
+    color: #fff;
+  }
+  .card:nth-child(3) .fa{
+    color: #fff;
+  }
+  .card:nth-child(4) .fa{
+    color: #fff;
+  }
+  .card:nth-child(5) .fa{
+    color: #fff;
+  }
+
+  .card .content .text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10px;
+    color: #fff;
+    width: 100%;
+  }
+
+  .card .content .text div{
+    /* 超出显示省略号 (需要设置width) */
+    width: 1080px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+
+  .card .content .text .tit{
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .card .content .text .sub{
+    /* 设置过渡效果延迟 */
+    transition-delay: 0.1s;
+  }
+
+  .card.active{
+    flex: 1;
+    margin: 0;
+    border-radius: 30px;
+  }
+
+  .card.active .shadow{
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.35) 65%, transparent);
+  }
+
+  .card.active .content{
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .card.active .content .text div{
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+.item .content{
+  display: flex;
+  position: absolute;
+  left: 10px;
+  right: 0;
+  bottom: 10px;
+  height: 40px;
+  transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+}
+
+.item .content .icon{
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bgColorItem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+
+.item:nth-child(1) .fa{
+  color: #fff;
+}
+.item:nth-child(2) .fa{
+  color: #fff;
+}
+.item:nth-child(3) .fa{
+  color: #fff;
+}
+.item:nth-child(4) .fa{
+  color: #fff;
+}
+.item:nth-child(5) .fa{
+  color: #fff;
+}
+
+.item .content .text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+  color: #fff;
+  width: 100%;
+}
+
+.item .content .text div{
+  /* 超出显示省略号 (需要设置width) */
+  width: calc(100% - 70px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.item .content .text .tit{
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.item .content .text .sub{
+  /* 设置过渡效果延迟 */
+  transition-delay: 0.1s;
+}
+
+.item.active{
+  flex: 1;
+  margin: 0;
+  border-radius: 30px;
+}
+
+.item.active .shadow{
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.35) 65%, transparent);
+}
+
+.item.active .content{
+  bottom: 20px;
+  left: 20px;
+}
+
+.item.active .content .text div{
+  opacity: 1;
+}
+
+/* 定义动画 */
+/* 光标闪烁 */
+@keyframes blink {
+  0%,39%{
+    opacity: 0;
+  }
+  40%,100%{
+    opacity: 1;
+  }
+}
+/* 打字动画 */
+@keyframes typing {
+  0%{
+    width: 0;
+  }
+  100%{
+    /* 计算字全部显示完的宽度,65px表示单个字宽度 */
+    width: var(--areawidth);
+  }
+}
+/* 打字动画 */
+@keyframes typingac {
+  0%{
+    width: 0;
+  }
+  100%{
+    /* 计算字全部显示完的宽度,65px表示单个字宽度 */
+    width: var(--areawidth);
+  }
+}

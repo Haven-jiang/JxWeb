@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $.post({
+            url: "/function/getValue",
+            data: null,
+            success: function (data) {
+                console.log(data);
+                codes = data.codes;
+                routes = data.routes;
+
+                code.style.setProperty("--fontsize", ((body.offsetWidth*0.5)/data.codes[0].length) - 1);
+                code.style.setProperty("--fontwidth", ((body.offsetWidth*0.5)/codes[0].length));
+                code.style.setProperty("--areawidth", body.offsetWidth*0.5);
+                code.style.setProperty("--count", data.codes[0].length);
+                code.textContent = data.codes[0];
+            }
+        })
+    //    https://have1.coding.net/p/image/d/image/git/raw/master/ 姜小屋 - 功能专区
+    </script>
+</head>
+<body>
+</body>
+</html>
